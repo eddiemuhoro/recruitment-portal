@@ -14,6 +14,40 @@ function JobApplicationFormWrapper() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const handleJobApplication = async (formData: FormData) => {
+    try {
+      const newApplication: JobApplication = {
+        id: Date.now().toString(),
+        job_id: job_id as string,
+        applicant_name: formData.get('name') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        cv_url: formData.get('cv_url') as string,
+        cover_letter: formData.get('cover_letter') as string,
+        status: 'pending',
+        applied_date: new Date().toISOString(),
+      };
+      
+      const response = await fetch('http://localhost:8000/api/applications/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newApplication),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit application');
+      }
+
+      alert('Application submitted successfully!');
+      window.location.href = '/jobs'; // Redirect to jobs list
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      alert('Failed to submit application. Please try again.');
+    }
+  };
+
   useEffect(() => {
     const loadJob = async () => {
       try {
@@ -35,7 +69,7 @@ function JobApplicationFormWrapper() {
   if (error) return <div>{error}</div>;
   if (!job) return <div>Job not found</div>;
 
-  return <JobApplicationForm job={job} />;
+  return <JobApplicationForm job={job} onSubmit={handleJobApplication} />;
 }
 
 function App() {
@@ -54,20 +88,38 @@ function App() {
     ));
   };
 
-  const handleJobApplication = (formData: FormData) => {
-    // In a real application, this would be an API call
-    const newApplication: JobApplication = {
-      id: Date.now().toString(),
-      job_id: formData.get('job_id') as string,
-      applicant_name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      phone: formData.get('phone') as string,
-      cv_url: URL.createObjectURL(formData.get('cv') as File),
-      cover_letter: formData.get('cover_letter') as string,
-      status: 'pending',
-      appliedDate: new Date().toISOString(),
-    };
-    setApplications([...applications, newApplication]);
+  const handleJobApplication = async (formData: FormData) => {
+    try {
+      const newApplication: JobApplication = {
+        id: Date.now().toString(),
+        job_id: formData.get('job_id') as string,
+        applicant_name: formData.get('name') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        cv_url: formData.get('cv_url') as string,
+        cover_letter: formData.get('cover_letter') as string,
+        status: 'pending',
+        applied_date: new Date().toISOString(),
+      };
+      
+      const response = await fetch('http://localhost:8000/api/applications/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newApplication),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit application');
+      }
+
+      alert('Application submitted successfully!');
+      window.location.href = '/jobs'; // Redirect to jobs list
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      alert('Failed to submit application. Please try again.');
+    }
   };
 
   return (

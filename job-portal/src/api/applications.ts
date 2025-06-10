@@ -38,4 +38,18 @@ export async function createApplication(application: Omit<JobApplication, 'id'>)
     throw new Error('Failed to create application');
   }
   return response.json();
+}
+
+export async function updateApplicationStatus(applicationId: string, status: JobApplication['status']): Promise<void> {
+  const response = await fetch(`${API_URL}/applications/${applicationId}/status`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ status }),
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to update application status');
+  }
 } 

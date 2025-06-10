@@ -1,50 +1,47 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import type { Job } from '../types';
-import { createApplication } from '../api/applications';
+import { uploadFile } from '../utils/firebase';
 
 interface JobApplicationFormProps {
   job: Job;
+  onSubmit: (formData: FormData) => void;
 }
 
-export default function JobApplicationForm({ job }: JobApplicationFormProps) {
+export default function JobApplicationForm({ job, onSubmit }: JobApplicationFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     cover_letter: '',
   });
-  const [cvFile, setCvFile] = useState<File | string>('null');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
     try {
-      const applicationData = {
-        job_id: job.id,
-        applicant_name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        cover_letter: formData.cover_letter,
-        cv_url: 'https://example.com/cv.pdf', // Provide a default URL
-        status: 'pending' as const,
-        appliedDate: new Date().toISOString(),
-      };
-
-      await createApplication(applicationData);
-      alert('Application submitted successfully!');
-    } catch (err) {
-      setError('Failed to submit application');
+      setIsUploading(true);
+      setUploadError(null);
+      
+      const cvFile = formData.get('cv') as File;
+      if (cvFile) {
+        const cvUrl = await uploadFile(cvFile);
+        formData.set('cv_url', cvUrl);
+      }
+      
+      onSubmit(formData);
+    } catch (error) {
+      setUploadError('Failed to upload CV. Please try again.');
     } finally {
-      setLoading(false);
+      setIsUploading(false);
     }
   };
 
@@ -55,7 +52,7 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
         <p className="mt-1 text-gray-600">{job.company}</p>
       </div>
 
-      {error && <div className="text-red-500">{error}</div>}
+      {uploadError && <div className="text-red-500">{uploadError}</div>}
 
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -103,26 +100,6 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
       </div>
 
       <div>
-        <label htmlFor="cv" className="block text-sm font-medium text-gray-700">
-          CV/Resume
-        </label>
-        <input
-          type="file"
-          id="cv"
-          name="cv"
-          accept=".pdf,.doc,.docx"
-          required
-          className="mt-1 block w-full text-sm text-gray-500
-            file:mr-4 file:py-2 file:px-4
-            file:rounded-md file:border-0
-            file:text-sm file:font-semibold
-            file:bg-blue-50 file:text-blue-700
-            hover:file:bg-blue-100"
-          onChange={(e) => setCvFile('null')}
-        />
-      </div>
-
-      <div>
         <label htmlFor="cover_letter" className="block text-sm font-medium text-gray-700">
           Cover Letter
         </label>
@@ -138,8 +115,27 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
       </div>
 
       <div>
-        <button type="submit" className="btn-primary w-full" disabled={loading}>
-          {loading ? 'Submitting...' : 'Submit Application'}
+        <label htmlFor="cv" className="block text-sm font-medium text-gray-700">
+          CV/Resume
+        </label>
+        <input
+          type="file"
+          id="cv"
+          name="cv"
+          accept=".pdf,.doc,.docx"
+          required
+          className="mt-1 block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-md file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-50 file:text-blue-700
+            hover:file:bg-blue-100"
+        />
+      </div>
+
+      <div>
+        <button type="submit" className="btn-primary w-full" disabled={isUploading}>
+          {isUploading ? 'Uploading...' : 'Submit Application'}
         </button>
       </div>
     </form>
