@@ -12,6 +12,7 @@ export const mockJobs: Job[] = [
     salary: '$120,000 - $150,000',
     status: 'active',
     postedDate: '2024-03-15',
+    employer_id: 1,
   },
   {
     id: '2',
@@ -24,6 +25,7 @@ export const mockJobs: Job[] = [
     salary: '$90,000 - $110,000',
     status: 'active',
     postedDate: '2024-03-14',
+    employer_id: 2,
   },
 ];
 
@@ -37,7 +39,7 @@ export const mockApplications: JobApplication[] = [
     cv_url: '/cvs/john-doe-cv.pdf',
     cover_letter: 'I am excited to apply for this position...',
     status: 'pending',
-    appliedDate: '2024-03-16',
+    applied_date: '2024-03-16',
   },
 ];
 
