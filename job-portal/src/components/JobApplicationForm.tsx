@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import type { FormEvent } from 'react';
 import type { Job } from '../types';
 import { uploadFile } from '../utils/firebase';
 

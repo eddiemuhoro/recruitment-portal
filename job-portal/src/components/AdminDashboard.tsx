@@ -19,7 +19,7 @@ interface AdminDashboardProps {
 }
 
 // AI Score Circle Component
-const AIScoreCircle = ({ score, status }: { score: number; status: JobApplication['status'] }) => {
+const AIScoreCircle = ({ score }: { score: number; status: JobApplication['status'] }) => {
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600';
     if (score >= 60) return 'text-blue-600';
