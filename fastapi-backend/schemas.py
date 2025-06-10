@@ -51,6 +51,9 @@ class JobApplicationBase(BaseModel):
 class JobApplicationCreate(JobApplicationBase):
     pass
 
+class JobApplicationUpdate(BaseModel):
+    status: str
+
 class JobApplication(JobApplicationBase):
     id: int
     cv_url: str
