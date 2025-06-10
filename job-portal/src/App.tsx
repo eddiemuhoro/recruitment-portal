@@ -1,12 +1,12 @@
-import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-import Layout from './components/Layout';
-import JobList from './components/JobList';
-import JobApplicationForm from './components/JobApplicationForm';
-import AdminDashboard from './components/AdminDashboard';
-import { mockJobs, mockApplications } from './data/mockData';
-import { useState, useEffect } from 'react';
-import type { Job, JobApplication } from './types';
+import { useEffect, useState } from 'react';
+import { Route, BrowserRouter as Router, Routes, useParams } from 'react-router-dom';
 import { fetchJobById } from './api/jobs';
+import AdminDashboard from './components/AdminDashboard';
+import JobApplicationForm from './components/JobApplicationForm';
+import JobList from './components/JobList';
+import Layout from './components/Layout';
+import { mockApplications } from './data/mockData';
+import type { Job, JobApplication } from './types';
 
 function JobApplicationFormWrapper() {
   const { job_id } = useParams();
@@ -73,14 +73,8 @@ function JobApplicationFormWrapper() {
 }
 
 function App() {
-  const [jobs, setJobs] = useState<Job[]>(mockJobs);
   const [applications, setApplications] = useState<JobApplication[]>(mockApplications);
 
-  const handleJobStatusChange = (job_id: string, status: string) => {
-    setJobs(jobs.map(job => 
-      job.id === job_id ? { ...job, status: status as Job['status'] } : job
-    ));
-  };
 
   const handleApplicationStatusChange = (applicationId: string, status: string) => {
     setApplications(applications.map(application =>
@@ -88,39 +82,7 @@ function App() {
     ));
   };
 
-  const handleJobApplication = async (formData: FormData) => {
-    try {
-      const newApplication: JobApplication = {
-        id: Date.now().toString(),
-        job_id: formData.get('job_id') as string,
-        applicant_name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        phone: formData.get('phone') as string,
-        cv_url: formData.get('cv_url') as string,
-        cover_letter: formData.get('cover_letter') as string,
-        status: 'pending',
-        applied_date: new Date().toISOString(),
-      };
-      
-      const response = await fetch('http://localhost:8000/api/applications/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newApplication),
-      });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit application');
-      }
-
-      alert('Application submitted successfully!');
-      window.location.href = '/jobs'; // Redirect to jobs list
-    } catch (error) {
-      console.error('Error submitting application:', error);
-      alert('Failed to submit application. Please try again.');
-    }
-  };
 
   return (
     <Router>
