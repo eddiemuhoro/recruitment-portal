@@ -303,9 +303,12 @@ export default function AdminDashboard({
               activeTab === 'applications'
                 ? 'border-blue-500 text-blue-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
           >
             Applications
+            <span className="ml-2 bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full">
+              {applications.filter(app => app.status === 'pending').length}
+            </span>
           </button>
         </nav>
       </div>
@@ -430,7 +433,27 @@ export default function AdminDashboard({
       ) : (
         <div className="space-y-4">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold">Job Applications</h2>
+            <div className="flex items-center space-x-2">
+              <h2 className="text-xl font-semibold">Job Applications</h2>
+              <div className="group relative">
+                <button className="text-gray-400 hover:text-gray-500">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </button>
+                <div className="absolute left-0 mt-2 w-80 bg-white rounded-lg shadow-lg p-4 text-sm text-gray-600 hidden group-hover:block z-50">
+                  <h3 className="font-medium text-gray-900 mb-2">How to Use the Applications Dashboard</h3>
+                  <ul className="space-y-2">
+                    <li>• Use the status filters at the top to view applications by their current status</li>
+                    <li>• Click on any application card to view full details including the complete cover letter</li>
+                    <li>• Change application status using the dropdown menu on each card</li>
+                    <li>• When you mark an application as "Accepted", the candidate will automatically receive a text message notification</li>
+                    <li>• The AI Match Score helps identify the best candidates based on their qualifications</li>
+                    <li>• You can download candidate CVs by clicking the "View CV" link</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
             <div className="flex space-x-2 overflow-x-auto">
               {(['pending', 'reviewed', 'accepted', 'rejected'] as const).map((status) => (
                 <button
