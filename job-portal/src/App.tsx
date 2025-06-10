@@ -28,7 +28,7 @@ function JobApplicationFormWrapper() {
         applied_date: new Date().toISOString(),
       };
       
-      const response = await fetch('http://localhost:8000/api/applications/', {
+      const response = await fetch('https://skyways-54mr.onrender.com/api/applications/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
