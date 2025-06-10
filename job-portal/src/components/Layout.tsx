@@ -11,29 +11,38 @@ export default function Layout({ children }: LayoutProps) {
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex">
+            <div className="flex items-center space-x-4">
               <Link to="/" className="flex items-center">
                 <span className="text-xl font-bold text-blue-600">JobPortal</span>
               </Link>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link to="/jobs" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-500">
+              <div className="flex items-center space-x-4">
+                <Link 
+                  to="/jobs" 
+                  className="text-gray-900 inline-flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 hover:text-blue-600"
+                >
                   Jobs
                 </Link>
-                <Link to="/dashboard" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-500">
+                <Link 
+                  to="/dashboard" 
+                  className="text-gray-900 inline-flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 hover:text-blue-600"
+                >
                   Dashboard
                 </Link>
               </div>
             </div>
-            <div className="flex items-center">
-              <Link to="/login" className="btn-secondary">
+            {/* <div className="flex items-center">
+              <Link 
+                to="/login" 
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
                 Login
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {children}
       </main>
     </div>
