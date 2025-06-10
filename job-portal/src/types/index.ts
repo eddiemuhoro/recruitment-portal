@@ -30,7 +30,7 @@ export type JobApplication = {
   cv_url: string;
   cover_letter: string;
   status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
-  appliedDate: string;
+  applied_date: string;
 };
 
 export type User = {
