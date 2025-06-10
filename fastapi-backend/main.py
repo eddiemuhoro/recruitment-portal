@@ -1,3 +1,5 @@
+import uvicorn
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine
@@ -12,7 +14,7 @@ app = FastAPI(title="Job Portal API")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React app URL
+    allow_origins=["*"],  # In production, replace with your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,4 +35,8 @@ def db_check():
             result = connection.execute(text("SELECT 1")).scalar()
         return {"database": "connected", "result": result}
     except Exception as e:
-        return {"database": "error", "details": str(e)} 
+        return {"database": "error", "details": str(e)}
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True) 
