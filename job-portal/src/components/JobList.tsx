@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Job } from '../types';
 import { Link } from 'react-router-dom';
-import { fetchJobs } from '../api/jobs';
+import { getJobs } from '../api/jobs';
 
 export default function JobList() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -11,7 +11,7 @@ export default function JobList() {
   useEffect(() => {
     const loadJobs = async () => {
       try {
-        const data = await fetchJobs();
+        const data = await getJobs();
         setJobs(data);
       } catch (err) {
         setError('Failed to load jobs');

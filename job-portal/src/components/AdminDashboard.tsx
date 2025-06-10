@@ -1,30 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Job, JobApplication } from '../types';
-import { createJob } from '../api/jobs';
+import { createJob, getJobs, deleteJob } from '../api/jobs';
+import { getApplications } from '../api/applications';
 
 interface AdminDashboardProps {
-  jobs: Job[];
-  applications: JobApplication[];
-  onJobStatusChange: (jobId: string, status: string) => void;
   onApplicationStatusChange: (applicationId: string, status: string) => void;
 }
 
 export default function AdminDashboard({
-  jobs,
-  applications,
-  onJobStatusChange,
   onApplicationStatusChange,
 }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<'jobs' | 'applications'>('jobs');
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [applications, setApplications] = useState<JobApplication[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     company: '',
     location: '',
+    employer_id: 1,
     type: 'Full-time',
     description: '',
     requirements: '',
     salary: '',
   });
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [jobsData, applicationsData] = await Promise.all([
+          getJobs(),
+          getApplications()
+        ]);
+        setJobs(jobsData);
+        setApplications(applicationsData);
+      } catch (err) {
+        setError('Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,18 +52,18 @@ export default function AdminDashboard({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createJob({
+      const newJob = await createJob({
         ...formData,
         type: formData.type as Job['type'],
         requirements: formData.requirements.split(',').map(req => req.trim()),
-        status: 'active',
-        postedDate: new Date().toISOString(),
       });
+      setJobs([...jobs, newJob]);
       alert('Job posted successfully!');
       setFormData({
         title: '',
         company: '',
         location: '',
+        employer_id: 1,
         type: 'Full-time',
         description: '',
         requirements: '',
@@ -54,6 +73,20 @@ export default function AdminDashboard({
       alert('Failed to post job');
     }
   };
+
+  const handleDeleteJob = async (job_id: string) => {
+    if (window.confirm('Are you sure you want to delete this job?')) {
+      try {
+        await deleteJob(job_id);
+        setJobs(jobs.filter(job => job.id !== job_id));
+      } catch (err) {
+        alert('Failed to delete job');
+      }
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="space-y-6">
@@ -122,69 +155,98 @@ export default function AdminDashboard({
             <button type="submit" className="btn-primary w-full">Post Job</button>
           </form>
 
-          <h2>Manage Jobs</h2>
-          {jobs.map((job) => (
-            <div key={job.id} className="bg-white shadow rounded-lg p-6">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">{job.title}</h3>
-                  <p className="text-sm text-gray-500">{job.company} - {job.location}</p>
+          <h2 className="text-xl font-semibold mt-8 mb-4">Manage Jobs</h2>
+          {jobs.length === 0 ? (
+            <p className="text-gray-500">No jobs posted yet.</p>
+          ) : (
+            jobs.map((job) => (
+              <div key={job.id} className="bg-white shadow rounded-lg p-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900">{job.title}</h3>
+                    <p className="text-sm text-gray-500">{job.company} - {job.location}</p>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <select
+                      className="input-field w-40"
+                      value={job.status}
+                      onChange={(e) => {
+                        const updatedJobs = jobs.map(j => 
+                          j.id === job.id ? { ...j, status: e.target.value as Job['status'] } : j
+                        );
+                        setJobs(updatedJobs);
+                      }}
+                    >
+                      <option value="active">Active</option>
+                      <option value="closed">Closed</option>
+                      <option value="draft">Draft</option>
+                    </select>
+                    <button
+                      onClick={() => handleDeleteJob(job.id)}
+                      className="px-3 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-                <select
-                  className="input-field w-40"
-                  value={job.status || 'active'}
-                  onChange={(e) => onJobStatusChange(job.id, e.target.value)}
-                >
-                  <option value="active">Active</option>
-                  <option value="closed">Closed</option>
-                  <option value="draft">Draft</option>
-                </select>
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600">{job.description}</p>
+                </div>
               </div>
-              <div className="mt-4">
-                <p className="text-sm text-gray-600">{job.description}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       ) : (
         <div className="space-y-4">
-          <h2>Manage Applications</h2>
-          {applications.map((application) => (
-            <div key={application.id} className="bg-white shadow rounded-lg p-6">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">
-                    {application.applicantName}
-                  </h3>
-                  <p className="text-sm text-gray-500">{application.email} - {application.phone}</p>
+          <h2 className="text-xl font-semibold mb-4">Job Applications</h2>
+          {applications.length === 0 ? (
+            <p className="text-gray-500">No applications received yet.</p>
+          ) : (
+            applications.map((application) => (
+              <div key={application.id} className="bg-white shadow rounded-lg p-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900">
+                      {application.applicant_name}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {application.email} - {application.phone}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Applied for: {jobs.find(job => job.id === application.job_id)?.title}
+                    </p>
+                  </div>
+                  <select
+                    className="input-field w-40"
+                    value={application.status}
+                    onChange={(e) => onApplicationStatusChange(application.id, e.target.value)}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="reviewed">Reviewed</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
                 </div>
-                <select
-                  className="input-field w-40"
-                  value={application.status}
-                  onChange={(e) => onApplicationStatusChange(application.id, e.target.value)}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="reviewed">Reviewed</option>
-                  <option value="accepted">Accepted</option>
-                  <option value="rejected">Rejected</option>
-                </select>
+                <div className="mt-4">
+                  <h4 className="text-sm font-medium text-gray-900">Cover Letter</h4>
+                  <p className="mt-2 text-sm text-gray-600">{application.cover_letter}</p>
+                </div>
+                <div className="mt-4">
+                  <a
+                    href={application.cv_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                  >
+                    View CV
+                  </a>
+                </div>
+                <div className="mt-2 text-sm text-gray-500">
+                  Applied on: {new Date(application.appliedDate).toLocaleDateString()}
+                </div>
               </div>
-              <div className="mt-4">
-                <h4 className="text-sm font-medium text-gray-900">Cover Letter</h4>
-                <p className="mt-2 text-sm text-gray-600">{application.coverLetter}</p>
-              </div>
-              <div className="mt-4">
-                <a
-                  href={application.cvUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                >
-                  View CV
-                </a>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       )}
     </div>

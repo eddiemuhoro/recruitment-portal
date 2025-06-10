@@ -10,6 +10,7 @@ export const mockJobs: Job[] = [
     description: 'We are looking for an experienced React developer to join our team...',
     requirements: ['5+ years of React experience', 'TypeScript', 'Node.js'],
     salary: '$120,000 - $150,000',
+    status: 'active',
     postedDate: '2024-03-15',
   },
   {
@@ -21,6 +22,7 @@ export const mockJobs: Job[] = [
     description: 'Join our fast-growing startup as a Frontend Developer...',
     requirements: ['3+ years of frontend development', 'React', 'CSS/SCSS'],
     salary: '$90,000 - $110,000',
+    status: 'active',
     postedDate: '2024-03-14',
   },
 ];
@@ -28,12 +30,12 @@ export const mockJobs: Job[] = [
 export const mockApplications: JobApplication[] = [
   {
     id: '1',
-    jobId: '1',
-    applicantName: 'John Doe',
+    job_id: '1',
+    applicant_name: 'John Doe',
     email: 'john@example.com',
     phone: '123-456-7890',
-    cvUrl: '/cvs/john-doe-cv.pdf',
-    coverLetter: 'I am excited to apply for this position...',
+    cv_url: '/cvs/john-doe-cv.pdf',
+    cover_letter: 'I am excited to apply for this position...',
     status: 'pending',
     appliedDate: '2024-03-16',
   },

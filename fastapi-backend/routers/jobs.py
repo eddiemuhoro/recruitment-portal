@@ -27,4 +27,28 @@ def read_job(job_id: int, db: Session = Depends(get_db)):
     db_job = db.query(Job).filter(Job.id == job_id).first()
     if db_job is None:
         raise HTTPException(status_code=404, detail="Job not found")
-    return db_job 
+    return db_job
+
+@router.put("/jobs/{job_id}", response_model=JobSchema)
+def update_job(job_id: int, job: JobCreate, db: Session = Depends(get_db)):
+    db_job = db.query(Job).filter(Job.id == job_id).first()
+    if db_job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    job_data = job.dict()
+    for key, value in job_data.items():
+        setattr(db_job, key, value)
+    
+    db.commit()
+    db.refresh(db_job)
+    return db_job
+
+@router.delete("/jobs/{job_id}")
+def delete_job(job_id: int, db: Session = Depends(get_db)):
+    db_job = db.query(Job).filter(Job.id == job_id).first()
+    if db_job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    db.delete(db_job)
+    db.commit()
+    return {"message": "Job deleted successfully"} 

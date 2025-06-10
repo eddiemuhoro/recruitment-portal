@@ -7,18 +7,28 @@ export type Job = {
   description: string;
   requirements: string[];
   salary: string;
+  status: 'active' | 'closed' | 'draft';
   postedDate: string;
-  status?: 'active' | 'closed' | 'draft';
+};
+
+export type JobCreate = {
+  title: string;
+  company: string;
+  location: string;
+  type: 'Full-time' | 'Part-time' | 'Contract' | 'Remote';
+  description: string;
+  requirements: string[];
+  salary: string;
 };
 
 export type JobApplication = {
   id: string;
-  jobId: string;
-  applicantName: string;
+  job_id: string;
+  applicant_name: string;
   email: string;
   phone: string;
-  cvUrl: string;
-  coverLetter: string;
+  cv_url: string;
+  cover_letter: string;
   status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
   appliedDate: string;
 };

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
 from datetime import datetime
 from models import JobType, JobStatus, ApplicationStatus, UserRole
@@ -44,6 +44,9 @@ class JobApplicationBase(BaseModel):
     email: EmailStr
     phone: str
     cover_letter: str
+    cv_url: str
+    status: ApplicationStatus = ApplicationStatus.PENDING
+    applied_date: datetime = Field(default_factory=datetime.utcnow)
 
 class JobApplicationCreate(JobApplicationBase):
     pass

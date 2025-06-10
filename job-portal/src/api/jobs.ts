@@ -1,24 +1,16 @@
-import type { Job } from '../types';
+import type { Job, JobCreate } from '../types';
 
 const API_URL = 'http://localhost:8000/api';
 
-export const fetchJobs = async (): Promise<Job[]> => {
+export async function getJobs(): Promise<Job[]> {
   const response = await fetch(`${API_URL}/jobs/`);
   if (!response.ok) {
     throw new Error('Failed to fetch jobs');
   }
   return response.json();
-};
+}
 
-export const fetchJobById = async (id: string): Promise<Job> => {
-  const response = await fetch(`${API_URL}/jobs/${id}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch job');
-  }
-  return response.json();
-};
-
-export const createJob = async (job: Omit<Job, 'id'>): Promise<Job> => {
+export async function createJob(job: JobCreate): Promise<Job> {
   const response = await fetch(`${API_URL}/jobs/`, {
     method: 'POST',
     headers: {
@@ -28,6 +20,23 @@ export const createJob = async (job: Omit<Job, 'id'>): Promise<Job> => {
   });
   if (!response.ok) {
     throw new Error('Failed to create job');
+  }
+  return response.json();
+}
+
+export async function deleteJob(job_id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/jobs/${job_id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to delete job');
+  }
+}
+
+export const fetchJobById = async (id: string): Promise<Job> => {
+  const response = await fetch(`${API_URL}/jobs/${id}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch job');
   }
   return response.json();
 }; 

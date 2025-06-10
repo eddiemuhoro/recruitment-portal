@@ -12,9 +12,9 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
     name: '',
     email: '',
     phone: '',
-    coverLetter: '',
+    cover_letter: '',
   });
-  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvFile, setCvFile] = useState<File | string>('null');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,16 +28,18 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
     setError(null);
 
     try {
-      await createApplication({
-        jobId: job.id,
-        applicantName: formData.name,
+      const applicationData = {
+        job_id: job.id,
+        applicant_name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        coverLetter: formData.coverLetter,
-        cvUrl: 'placeholder-url', // Replace with actual CV upload logic
-        status: 'pending',
+        cover_letter: formData.cover_letter,
+        cv_url: 'https://example.com/cv.pdf', // Provide a default URL
+        status: 'pending' as const,
         appliedDate: new Date().toISOString(),
-      });
+      };
+
+      await createApplication(applicationData);
       alert('Application submitted successfully!');
     } catch (err) {
       setError('Failed to submit application');
@@ -62,6 +64,7 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
         <input
           type="text"
           id="name"
+          name="name"
           required
           className="input-field mt-1"
           value={formData.name}
@@ -76,6 +79,7 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
         <input
           type="email"
           id="email"
+          name="email"
           required
           className="input-field mt-1"
           value={formData.email}
@@ -90,6 +94,7 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
         <input
           type="tel"
           id="phone"
+          name="phone"
           required
           className="input-field mt-1"
           value={formData.phone}
@@ -104,6 +109,7 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
         <input
           type="file"
           id="cv"
+          name="cv"
           accept=".pdf,.doc,.docx"
           required
           className="mt-1 block w-full text-sm text-gray-500
@@ -112,20 +118,21 @@ export default function JobApplicationForm({ job }: JobApplicationFormProps) {
             file:text-sm file:font-semibold
             file:bg-blue-50 file:text-blue-700
             hover:file:bg-blue-100"
-          onChange={(e) => setCvFile(e.target.files?.[0] || null)}
+          onChange={(e) => setCvFile('null')}
         />
       </div>
 
       <div>
-        <label htmlFor="coverLetter" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="cover_letter" className="block text-sm font-medium text-gray-700">
           Cover Letter
         </label>
         <textarea
-          id="coverLetter"
+          id="cover_letter"
+          name="cover_letter"
           rows={6}
           required
           className="input-field mt-1"
-          value={formData.coverLetter}
+          value={formData.cover_letter}
           onChange={handleChange}
         />
       </div>

@@ -18,7 +18,15 @@ export const fetchApplicationById = async (id: string): Promise<JobApplication> 
   return response.json();
 };
 
-export const createApplication = async (application: Omit<JobApplication, 'id'>): Promise<JobApplication> => {
+export async function getApplications(): Promise<JobApplication[]> {
+  const response = await fetch(`${API_URL}/applications/`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch applications');
+  }
+  return response.json();
+}
+
+export async function createApplication(application: Omit<JobApplication, 'id'>): Promise<JobApplication> {
   const response = await fetch(`${API_URL}/applications/`, {
     method: 'POST',
     headers: {
@@ -30,4 +38,4 @@ export const createApplication = async (application: Omit<JobApplication, 'id'>)
     throw new Error('Failed to create application');
   }
   return response.json();
-}; 
+} 
