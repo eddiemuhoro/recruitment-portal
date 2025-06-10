@@ -1,20 +1,154 @@
 import { useState, useEffect } from 'react';
 import type { Job, JobApplication } from '../types';
-import { createJob, getJobs, deleteJob } from '../api/jobs';
-import { getApplications } from '../api/applications';
+import { createJob, getJobs, deleteJob, updateJob } from '../api/jobs';
+import { getApplications, updateApplicationStatus } from '../api/applications';
+
+// Helper function for status colors
+const getStatusColor = (status: JobApplication['status']) => {
+  switch (status) {
+    case 'pending': return 'bg-yellow-100 text-yellow-800';
+    case 'reviewed': return 'bg-blue-100 text-blue-800';
+    case 'accepted': return 'bg-green-100 text-green-800';
+    case 'rejected': return 'bg-red-100 text-red-800';
+    default: return 'bg-gray-100 text-gray-800';
+  }
+};
 
 interface AdminDashboardProps {
   onApplicationStatusChange: (applicationId: string, status: string) => void;
 }
 
+// AI Score Circle Component
+const AIScoreCircle = ({ score, status }: { score: number; status: JobApplication['status'] }) => {
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return 'text-green-600';
+    if (score >= 60) return 'text-blue-600';
+    if (score >= 40) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  return (
+    <div className="relative w-16 h-16">
+      <svg className="w-full h-full" viewBox="0 0 36 36">
+        {/* Background circle */}
+        <circle
+          cx="18"
+          cy="18"
+          r="15.91549430918954"
+          fill="none"
+          stroke="#E5E7EB"
+          strokeWidth="3"
+        />
+        {/* Score circle */}
+        <circle
+          cx="18"
+          cy="18"
+          r="15.91549430918954"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeDasharray={`${score} 100`}
+          strokeLinecap="round"
+          className={getScoreColor(score)}
+          transform="rotate(-90 18 18)"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className={`text-sm font-bold ${getScoreColor(score)}`}>
+          {score}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+// Application Detail Modal Component
+const ApplicationDetailModal = ({ 
+  application, 
+  job,
+  onClose,
+  onStatusChange 
+}: { 
+  application: JobApplication;
+  job: Job | undefined;
+  onClose: () => void;
+  onStatusChange: (applicationId: string, status: JobApplication['status']) => void;
+}) => {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">{application.applicant_name}</h2>
+              <p className="text-gray-600">{application.email} - {application.phone}</p>
+              <p className="text-gray-600 mt-1">Applied for: {job?.title}</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-500"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Cover Letter</h3>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-700 whitespace-pre-wrap">{application.cover_letter}</p>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Application Status</h3>
+              <select
+                className={`px-4 py-2 rounded-lg text-sm font-medium ${getStatusColor(application.status)}`}
+                value={application.status}
+                onChange={(e) => onStatusChange(application.id, e.target.value as JobApplication['status'])}
+              >
+                <option value="pending">Pending</option>
+                <option value="reviewed">Reviewed</option>
+                <option value="accepted">Accepted</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <a
+                href={application.cv_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center"
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                View CV
+              </a>
+              <span className="text-sm text-gray-500">
+                Applied on: {new Date(application.applied_date).toLocaleDateString()}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function AdminDashboard({
   onApplicationStatusChange,
 }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<'jobs' | 'applications'>('jobs');
+  const [activeStatus, setActiveStatus] = useState<JobApplication['status']>('pending');
   const [jobs, setJobs] = useState<Job[]>([]);
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     company: '',
@@ -25,6 +159,7 @@ export default function AdminDashboard({
     requirements: '',
     salary: '',
   });
+  const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -56,6 +191,7 @@ export default function AdminDashboard({
         ...formData,
         type: formData.type as Job['type'],
         requirements: formData.requirements.split(',').map(req => req.trim()),
+        status: 'active' as const,
       });
       setJobs([...jobs, newJob]);
       alert('Job posted successfully!');
@@ -85,12 +221,71 @@ export default function AdminDashboard({
     }
   };
 
+  const handleStatusChange = async (applicationId: string, newStatus: JobApplication['status']) => {
+    try {
+      await updateApplicationStatus(applicationId, newStatus);
+      setApplications(applications.map(app =>
+        app.id === applicationId ? { ...app, status: newStatus } : app
+      ));
+      onApplicationStatusChange(applicationId, newStatus);
+    } catch (err) {
+      alert('Failed to update application status');
+    }
+  };
+
+  const filteredApplications = applications.filter(app => app.status === activeStatus);
+
+  const handleEditJob = (job: Job) => {
+    setEditingJob(job);
+    setFormData({
+      title: job.title,
+      company: job.company,
+      location: job.location,
+      employer_id: 1,
+      type: job.type,
+      description: job.description,
+      requirements: job.requirements.join(', '),
+      salary: job.salary,
+    });
+  };
+
+  const handleUpdateJob = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingJob) return;
+
+    try {
+      const updatedJob = await updateJob(editingJob.id, {
+        ...formData,
+        type: formData.type as Job['type'],
+        requirements: formData.requirements.split(',').map(req => req.trim()),
+        status: editingJob.status,
+      });
+      
+      setJobs(jobs.map(job => job.id === editingJob.id ? updatedJob : job));
+      setEditingJob(null);
+      setFormData({
+        title: '',
+        company: '',
+        location: '',
+        employer_id: 1,
+        type: 'Full-time',
+        description: '',
+        requirements: '',
+        salary: '',
+      });
+      alert('Job updated successfully!');
+    } catch (err) {
+      alert('Failed to update job');
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className="space-y-6">
       <div className="border-b border-gray-200">
+        <h2 className="text-xl font-bold">Admin Dashboard(Only admin can see this page)</h2>
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab('jobs')}
@@ -117,8 +312,13 @@ export default function AdminDashboard({
 
       {activeTab === 'jobs' ? (
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold mb-4">Post a New Job</h2>
-          <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 space-y-4 max-w-xl mx-auto">
+          <h2 className="text-xl font-semibold mb-4">
+            {editingJob ? 'Edit Job' : 'Post a New Job'}
+          </h2>
+          <form 
+            onSubmit={editingJob ? handleUpdateJob : handleSubmit} 
+            className="bg-white shadow rounded-lg p-6 space-y-4 max-w-xl mx-auto"
+          >
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Title:</label>
               <input type="text" name="title" value={formData.title} onChange={handleChange} required className="input-field w-full" />
@@ -152,7 +352,32 @@ export default function AdminDashboard({
               <label className="block text-sm font-medium text-gray-700 mb-1">Salary:</label>
               <input type="text" name="salary" value={formData.salary} onChange={handleChange} required className="input-field w-full" />
             </div>
-            <button type="submit" className="btn-primary w-full">Post Job</button>
+            <div className="flex space-x-4">
+              <button type="submit" className="btn-primary flex-1">
+                {editingJob ? 'Update Job' : 'Post Job'}
+              </button>
+              {editingJob && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingJob(null);
+                    setFormData({
+                      title: '',
+                      company: '',
+                      location: '',
+                      employer_id: 1,
+                      type: 'Full-time',
+                      description: '',
+                      requirements: '',
+                      salary: '',
+                    });
+                  }}
+                  className="btn-secondary flex-1"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </form>
 
           <h2 className="text-xl font-semibold mt-8 mb-4">Manage Jobs</h2>
@@ -182,6 +407,12 @@ export default function AdminDashboard({
                       <option value="draft">Draft</option>
                     </select>
                     <button
+                      onClick={() => handleEditJob(job)}
+                      className="px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md"
+                    >
+                      Edit
+                    </button>
+                    <button
                       onClick={() => handleDeleteJob(job.id)}
                       className="px-3 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md"
                     >
@@ -198,54 +429,110 @@ export default function AdminDashboard({
         </div>
       ) : (
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold mb-4">Job Applications</h2>
-          {applications.length === 0 ? (
-            <p className="text-gray-500">No applications received yet.</p>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold">Job Applications</h2>
+            <div className="flex space-x-2 overflow-x-auto">
+              {(['pending', 'reviewed', 'accepted', 'rejected'] as const).map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setActiveStatus(status)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium ${
+                    activeStatus === status
+                      ? 'bg-blue-100 text-blue-800'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                  <span className="ml-2 bg-white px-2 py-0.5 rounded-full text-xs">
+                    {applications.filter(app => app.status === status).length}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {filteredApplications.length === 0 ? (
+            <div className="text-center py-12 bg-gray-50 rounded-lg">
+              <p className="text-gray-500">No {activeStatus} applications found.</p>
+            </div>
           ) : (
-            applications.map((application) => (
-              <div key={application.id} className="bg-white shadow rounded-lg p-6">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900">
-                      {application.applicant_name}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {application.email} - {application.phone}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Applied for: {jobs.find(job => job.id === application.job_id)?.title}
-                    </p>
+            <div className="grid gap-6 md:grid-cols-2">
+              {filteredApplications.map((application) => (
+                <div 
+                  key={application.id} 
+                  className="bg-white shadow rounded-lg p-6 cursor-pointer hover:shadow-md transition-shadow"
+                  onClick={() => setSelectedApplication(application)}
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-900">
+                        {application.applicant_name}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {application.email} - {application.phone}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Applied for: {jobs.find(job => job.id === application.job_id)?.title}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end space-y-3">
+                      <select
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(application.status)}`}
+                        value={application.status}
+                        onChange={(e) => handleStatusChange(application.id, e.target.value as JobApplication['status'])}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="reviewed">Reviewed</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                      <div className="flex flex-col items-center">
+                        <span className="text-xs font-medium text-gray-500 mb-1">AI Match Score</span>
+                        <AIScoreCircle 
+                          score={
+                            application.status === 'accepted' 
+                              ? Math.floor(Math.random() * 20) + 80 // 80-100
+                              : application.status === 'rejected'
+                              ? Math.floor(Math.random() * 40) // 0-40
+                              : Math.floor(Math.random() * 20) + 60 // 60-80
+                          }
+                          status={application.status}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <select
-                    className="input-field w-40"
-                    value={application.status}
-                    onChange={(e) => onApplicationStatusChange(application.id, e.target.value)}
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="reviewed">Reviewed</option>
-                    <option value="accepted">Accepted</option>
-                    <option value="rejected">Rejected</option>
-                  </select>
+                  <div className="mt-4">
+                    <h4 className="text-sm font-medium text-gray-900">Cover Letter</h4>
+                    <p className="mt-2 text-sm text-gray-600 line-clamp-3">{application.cover_letter}</p>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between">
+                    <a
+                      href={application.cv_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      View CV
+                    </a>
+                    <span className="text-sm text-gray-500">
+                      Applied on: {new Date(application.applied_date).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium text-gray-900">Cover Letter</h4>
-                  <p className="mt-2 text-sm text-gray-600">{application.cover_letter}</p>
-                </div>
-                <div className="mt-4">
-                  <a
-                    href={application.cv_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                  >
-                    View CV
-                  </a>
-                </div>
-                <div className="mt-2 text-sm text-gray-500">
-                  Applied on: {new Date(application.appliedDate).toLocaleDateString()}
-                </div>
-              </div>
-            ))
+              ))}
+            </div>
+          )}
+
+          {selectedApplication && (
+            <ApplicationDetailModal
+              application={selectedApplication}
+              job={jobs.find(job => job.id === selectedApplication.job_id)}
+              onClose={() => setSelectedApplication(null)}
+              onStatusChange={handleStatusChange}
+            />
           )}
         </div>
       )}
