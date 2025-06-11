@@ -7,6 +7,9 @@ import JobList from './components/JobList';
 import Layout from './components/Layout';
 import { mockApplications } from './data/mockData';
 import type { Job, JobApplication } from './types';
+import Home from './pages/Home';
+import Contact from './pages/Contact';
+import Services from './pages/Services';
 
 function JobApplicationFormWrapper() {
   const { job_id } = useParams();
@@ -88,8 +91,9 @@ function App() {
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<JobList />} />
+          <Route path="/" element={<Services />} />
           <Route path="/jobs" element={<JobList />} />
+          <Route path="/contact" element={<Contact />} />
           <Route
             path="/jobs/:job_id/apply"
             element={<JobApplicationFormWrapper />}
