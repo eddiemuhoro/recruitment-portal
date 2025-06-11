@@ -28,7 +28,7 @@ function JobApplicationFormWrapper() {
         applied_date: new Date().toISOString(),
       };
       
-      const response = await fetch('https://skyways-54mr.onrender.com/api/applications/', {
+      const response = await fetch('https://skyways-five.vercel.app/api/applications/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

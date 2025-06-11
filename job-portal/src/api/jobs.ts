@@ -1,6 +1,6 @@
 import type { Job, JobCreate } from '../types';
 
-const API_URL = 'https://skyways-54mr.onrender.com/api';
+const API_URL = 'https://skyways-five.vercel.app/api';
 
 export async function getJobs(): Promise<Job[]> {
   const response = await fetch(`${API_URL}/jobs/`);
