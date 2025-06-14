@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ARRAY, DateTime, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, Text, ARRAY, DateTime, ForeignKey, Enum, Date
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
@@ -26,6 +26,19 @@ class UserRole(str, enum.Enum):
     EMPLOYER = "employer"
     USER = "user"
 
+class Agency(Base):
+    __tablename__ = "agencies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    agency_name = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False)
+    phone = Column(String, nullable=False)
+    license_number = Column(String, nullable=False)
+    license_expiry = Column(Date, nullable=False)
+    website_url = Column(String)
+
+    users = relationship("User", back_populates="agency")
+
 class User(Base):
     __tablename__ = "users"
 
@@ -34,6 +47,10 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     role = Column(Enum(UserRole), nullable=False)
     hashed_password = Column(String, nullable=False)
+    agency_id = Column(Integer, ForeignKey("agencies.id"))
+
+    agency = relationship("Agency", back_populates="users")
+    jobs = relationship("Job", back_populates="employer")
 
 class Job(Base):
     __tablename__ = "jobs"
@@ -50,7 +67,7 @@ class Job(Base):
     status = Column(Enum(JobStatus), default=JobStatus.ACTIVE)
     employer_id = Column(Integer, ForeignKey("users.id"))
 
-    employer = relationship("User")
+    employer = relationship("User", back_populates="jobs")
     applications = relationship("JobApplication", back_populates="job")
 
 class JobApplication(Base):
