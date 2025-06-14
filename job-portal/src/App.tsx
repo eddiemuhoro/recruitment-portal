@@ -1,114 +1,54 @@
-import { useEffect, useState } from 'react';
-import { Route, BrowserRouter as Router, Routes, useParams } from 'react-router-dom';
-import { fetchJobById } from './api/jobs';
-import { AdminDashboard } from './components/admin';
-import JobApplicationForm from './components/application/JobApplicationForm';
-import JobList from './components/jobs/JobList';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import Login from './pages/Login';
 import Layout from './components/layout/Layout';
-import { mockApplications } from './data/mockData';
-import type { Job, JobApplication } from './types';
-import Home from './pages/Home';
-import Contact from './pages/Contact';
 import Services from './pages/Services';
-
-function JobApplicationFormWrapper() {
-  const { job_id } = useParams();
-  const [job, setJob] = useState<Job | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleJobApplication = async (formData: FormData) => {
-    try {
-      const newApplication: JobApplication = {
-        id: Date.now().toString(),
-        job_id: job_id as string,
-        applicant_name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        phone: formData.get('phone') as string,
-        cv_url: formData.get('cv_url') as string,
-        cover_letter: formData.get('cover_letter') as string,
-        status: 'pending',
-        applied_date: new Date().toISOString(),
-      };
-      
-      const response = await fetch('https://skyways-five.vercel.app/api/applications/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newApplication),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit application');
-      }
-
-      alert('Application submitted successfully!');
-      window.location.href = '/jobs'; // Redirect to jobs list
-    } catch (error) {
-      console.error('Error submitting application:', error);
-      alert('Failed to submit application. Please try again.');
-    }
-  };
-
-  useEffect(() => {
-    const loadJob = async () => {
-      try {
-        if (job_id) {
-          const data = await fetchJobById(job_id);
-          setJob(data);
-        }
-      } catch (err) {
-        setError('Failed to load job');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadJob();
-  }, [job_id]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (!job) return <div>Job not found</div>;
-
-  return <JobApplicationForm job={job} onSubmit={handleJobApplication} />;
-}
+import JobList from './components/jobs/JobList';
+import Contact from './pages/Contact';
+import JobApplicationFormWrapper from './components/application/JobApplicationFormWrapper.tsx';
+import AdminDashboard from './components/admin/AdminDashboard';
+import { useState } from 'react';
+import type { JobApplication } from './types';
 
 function App() {
-  const [applications, setApplications] = useState<JobApplication[]>(mockApplications);
-
+  const [applications, setApplications] = useState<JobApplication[]>([]);
 
   const handleApplicationStatusChange = (applicationId: string, status: string) => {
-    setApplications(applications.map(application =>
-      application.id === applicationId ? { ...application, status: status as JobApplication['status'] } : application
-    ));
+    setApplications(prevApplications =>
+      prevApplications.map(app =>
+        app.id === applicationId ? { ...app, status: status as JobApplication['status'] } : app
+      )
+    );
   };
 
-
-
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Services />} />
-          <Route path="/jobs" element={<JobList />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route
-            path="/jobs/:job_id/apply"
-            element={<JobApplicationFormWrapper />}
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <AdminDashboard
-                onApplicationStatusChange={handleApplicationStatusChange}
-              />
-            }
-          />
-        </Routes>
-      </Layout>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Services />} />
+            <Route path="/jobs" element={<JobList />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route
+              path="/jobs/:job_id/apply"
+              element={<JobApplicationFormWrapper />}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard
+                    onApplicationStatusChange={handleApplicationStatusChange}
+                  />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Layout>
+      </Router>
+    </AuthProvider>
   );
 }
 
