@@ -1,9 +1,8 @@
 import type { JobApplication } from '../types';
-
-const API_URL = 'https://skyways-five.vercel.app/api';
+import { API_CONFIG } from './config';
 
 export const fetchApplications = async (): Promise<JobApplication[]> => {
-  const response = await fetch(`${API_URL}/applications/`);
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.APPLICATIONS.BASE}`);
   if (!response.ok) {
     throw new Error('Failed to fetch applications');
   }
@@ -11,7 +10,7 @@ export const fetchApplications = async (): Promise<JobApplication[]> => {
 };
 
 export const fetchApplicationById = async (id: string): Promise<JobApplication> => {
-  const response = await fetch(`${API_URL}/applications/${id}`);
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.APPLICATIONS.BASE}/${id}`);
   if (!response.ok) {
     throw new Error('Failed to fetch application');
   }
@@ -19,7 +18,7 @@ export const fetchApplicationById = async (id: string): Promise<JobApplication> 
 };
 
 export async function getApplications(): Promise<JobApplication[]> {
-  const response = await fetch(`${API_URL}/applications/`);
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.APPLICATIONS.BASE}`);
   if (!response.ok) {
     throw new Error('Failed to fetch applications');
   }
@@ -27,7 +26,7 @@ export async function getApplications(): Promise<JobApplication[]> {
 }
 
 export async function createApplication(application: Omit<JobApplication, 'id'>): Promise<JobApplication> {
-  const response = await fetch(`${API_URL}/applications/`, {
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.APPLICATIONS.BASE}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +40,7 @@ export async function createApplication(application: Omit<JobApplication, 'id'>)
 }
 
 export async function updateApplicationStatus(applicationId: string, status: JobApplication['status']): Promise<void> {
-  const response = await fetch(`${API_URL}/applications/${applicationId}/status`, {
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.APPLICATIONS.STATUS(applicationId)}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

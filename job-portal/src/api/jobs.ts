@@ -1,9 +1,8 @@
 import type { Job, JobCreate } from '../types';
-
-const API_URL = 'https://skyways-five.vercel.app/api';
+import { API_CONFIG } from './config';
 
 export async function getJobs(): Promise<Job[]> {
-  const response = await fetch(`${API_URL}/jobs/`);
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.JOBS.BASE}`);
   if (!response.ok) {
     throw new Error('Failed to fetch jobs');
   }
@@ -11,7 +10,7 @@ export async function getJobs(): Promise<Job[]> {
 }
 
 export async function createJob(job: JobCreate): Promise<Job> {
-  const response = await fetch(`${API_URL}/jobs/`, {
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.JOBS.BASE}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -25,7 +24,7 @@ export async function createJob(job: JobCreate): Promise<Job> {
 }
 
 export async function updateJob(jobId: string, job: JobCreate): Promise<Job> {
-  const response = await fetch(`${API_URL}/jobs/${jobId}`, {
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.JOBS.BASE}/${jobId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -39,7 +38,7 @@ export async function updateJob(jobId: string, job: JobCreate): Promise<Job> {
 }
 
 export async function deleteJob(job_id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/jobs/${job_id}`, {
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.JOBS.BASE}/${job_id}`, {
     method: 'DELETE',
   });
   if (!response.ok) {
@@ -48,7 +47,7 @@ export async function deleteJob(job_id: string): Promise<void> {
 }
 
 export const fetchJobById = async (id: string): Promise<Job> => {
-  const response = await fetch(`${API_URL}/jobs/${id}`);
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.JOBS.BASE}/${id}`);
   if (!response.ok) {
     throw new Error('Failed to fetch job');
   }
