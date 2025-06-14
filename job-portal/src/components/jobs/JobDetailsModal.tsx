@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import type { Job } from '../types';
+import type { Job } from '../../types';
 import { Link } from 'react-router-dom';
 
 interface JobDetailsModalProps {

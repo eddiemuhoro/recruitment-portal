@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { Job } from '../types';
-import { uploadFile } from '../utils/firebase';
+import type { Job } from '../../types';
+import { uploadFile } from '../../utils/firebase';
 
 interface JobApplicationFormProps {
   job: Job;

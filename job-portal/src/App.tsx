@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes, useParams } from 'react-router-dom';
 import { fetchJobById } from './api/jobs';
-import AdminDashboard from './components/AdminDashboard';
-import JobApplicationForm from './components/JobApplicationForm';
-import JobList from './components/JobList';
-import Layout from './components/Layout';
+import { AdminDashboard } from './components/admin';
+import JobApplicationForm from './components/application/JobApplicationForm';
+import JobList from './components/jobs/JobList';
+import Layout from './components/layout/Layout';
 import { mockApplications } from './data/mockData';
 import type { Job, JobApplication } from './types';
 import Home from './pages/Home';

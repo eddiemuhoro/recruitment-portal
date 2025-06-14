@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { Job } from '../types';
+import type { Job } from '../../types';
 import { Link } from 'react-router-dom';
-import { getJobs } from '../api/jobs';
+import { getJobs } from '../../api/jobs';
 import JobDetailsModal from './JobDetailsModal';
 
 export default function JobList() {
@@ -14,7 +14,7 @@ export default function JobList() {
     const loadJobs = async () => {
       try {
         const data = await getJobs();
-        setJobs(data);
+        setJobs(data.filter(job => job.status !== 'draft'));
       } catch (err) {
         setError('Failed to load jobs');
       } finally {
@@ -24,6 +24,27 @@ export default function JobList() {
 
     loadJobs();
   }, []);
+
+  const getStatusBadge = (status: Job['status']) => {
+    switch (status) {
+      case 'active':
+        return (
+          <span className="px-2.5 py-1 text-xs font-medium text-green-600 bg-green-50 rounded-full flex items-center gap-1">
+            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+            Active
+          </span>
+        );
+      case 'closed':
+        return (
+          <span className="px-2.5 py-1 text-xs font-medium text-gray-600 bg-gray-50 rounded-full flex items-center gap-1">
+            <span className="w-1.5 h-1.5 bg-gray-500 rounded-full"></span>
+            Closed
+          </span>
+        );
+      default:
+        return null;
+    }
+  };
 
   if (loading) return (
     <div className="flex justify-center items-center min-h-[400px]">
@@ -49,8 +70,10 @@ export default function JobList() {
         {jobs.map((job) => (
           <div 
             key={job.id} 
-            className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 cursor-pointer"
-            onClick={() => setSelectedJob(job)}
+            className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 ${
+              job.status === 'closed' ? 'opacity-75' : 'cursor-pointer'
+            }`}
+            onClick={() => job.status !== 'closed' && setSelectedJob(job)}
           >
             <div className="p-5">
               <div className="flex justify-between items-start mb-4">
@@ -60,9 +83,12 @@ export default function JobList() {
                   </h2>
                   <p className="text-sm text-gray-600">{job.company}</p>
                 </div>
-                <span className="px-2.5 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full">
-                  {job.type}
-                </span>
+                <div className="flex flex-col items-end gap-2">
+                  <span className="px-2.5 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full">
+                    {job.type}
+                  </span>
+                  {getStatusBadge(job.status)}
+                </div>
               </div>
               
               <div className="space-y-2 mb-4">
@@ -85,7 +111,7 @@ export default function JobList() {
               <div className="mb-4">
                 <h3 className="text-xs font-medium text-gray-900 mb-2">Key Requirements:</h3>
                 <ul className="text-xs text-gray-600 space-y-1">
-                  {job.requirements.slice(0, 2).map((req, index) => (
+                  {job.requirements.slice(0, 2).map((req: string, index: number) => (
                     <li key={index} className="flex items-start">
                       <span className="text-blue-500 mr-1">•</span>
                       <span className="line-clamp-1">{req}</span>
@@ -96,12 +122,24 @@ export default function JobList() {
                   )}
                 </ul>
               </div>
-              <Link
-                      to={`/jobs/${job.id}/apply`}
-                      className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200"
-                    >
-                      Apply Now
-                    </Link>
+
+              <div className="mt-4">
+                {job.status === 'closed' ? (
+                  <div className="flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-500 rounded-lg">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    Applications Closed
+                  </div>
+                ) : (
+                  <Link
+                    to={`/jobs/${job.id}/apply`}
+                    className="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                  >
+                    Apply Now
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         ))}

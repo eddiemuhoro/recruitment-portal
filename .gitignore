@@ -89,6 +89,7 @@ lib/
 lib64/
 parts/
 sdist/
+flask-api/
 var/
 wheels/
 *.egg-info/
