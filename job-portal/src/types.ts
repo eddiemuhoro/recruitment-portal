@@ -18,7 +18,7 @@ export type Job = {
   salary: string;
   status: 'active' | 'closed' | 'draft';
   employer_id: number;
-  postedDate: string;
+  posted_date: string;
 };
 
 export type JobApplication = {

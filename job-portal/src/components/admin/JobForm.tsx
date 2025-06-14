@@ -49,7 +49,7 @@ export const JobForm = ({ initialData, onSubmit, onCancel, isEditing }: JobFormP
       ...formData,
       type: formData.type as Job['type'],
       requirements: formData.requirements.split(',').map(req => req.trim()),
-      postedDate: new Date().toISOString(),
+      posted_date: new Date().toISOString(),
       status: formData.status as Job['status'],
     });
     handleClose();
