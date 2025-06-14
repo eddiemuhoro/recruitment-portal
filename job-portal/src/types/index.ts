@@ -8,7 +8,7 @@ export type Job = {
   requirements: string[];
   salary: string;
   status: 'active' | 'closed' | 'draft';
-  postedDate: string;
+  posted_date: string;
 };
 
 export type JobCreate = {

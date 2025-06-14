@@ -11,7 +11,7 @@ export const mockJobs: Job[] = [
     requirements: ['5+ years of React experience', 'TypeScript', 'Node.js'],
     salary: '$120,000 - $150,000',
     status: 'active',
-    postedDate: '2024-03-15',
+    posted_date: '2024-03-15',
     employer_id: 1,
   },
   {
@@ -24,7 +24,7 @@ export const mockJobs: Job[] = [
     requirements: ['3+ years of frontend development', 'React', 'CSS/SCSS'],
     salary: '$90,000 - $110,000',
     status: 'active',
-    postedDate: '2024-03-14',
+    posted_date: '2024-03-14',
     employer_id: 2,
   },
 ];
