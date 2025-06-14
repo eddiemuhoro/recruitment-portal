@@ -4,24 +4,26 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine
 from models import Base
-from routers import jobs, applications
+from routers import jobs, applications, auth
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Job Portal API")
+app = FastAPI()
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with your frontend URL
+    allow_origins=["*"],  # Allows all origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
+# Include routers
 app.include_router(jobs.router, prefix="/api", tags=["jobs"])
 app.include_router(applications.router, prefix="/api", tags=["applications"])
+app.include_router(auth.router, prefix="/api", tags=["auth"])
 
 @app.get("/")
 def read_root():
