@@ -31,4 +31,15 @@ export type JobApplication = {
   cover_letter: string;
   status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
   applied_date: string;
-}; 
+};
+
+export interface EmployerInquiry {
+  id: number;
+  agency_id: number;
+  employer_name: string;
+  message: string;
+  contact_email: string;
+  phone_number?: string;
+  is_urgent: boolean;
+  created_at: string;
+} 

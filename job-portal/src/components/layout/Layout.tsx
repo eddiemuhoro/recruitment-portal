@@ -28,12 +28,12 @@ export default function Layout({ children }: LayoutProps) {
                 >
                   Partner with Us
                 </Link>
-                <Link 
+                {/* <Link 
                   to="/dashboard" 
                   className="text-gray-900 inline-flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 hover:text-blue-600"
                 >
                   Dashboard
-                </Link>
+                </Link> */}
               </div>
             </div>
             {/* <div className="flex items-center">

@@ -1,34 +1,32 @@
 import { API_CONFIG } from './config';
+import type { EmployerInquiry } from '../types';
 
-interface EmployerInquiry {
-  id?: number; // Optional as it's auto-generated
-  agency_id: number;
-  employer_name: string;
-  message: string;
-  contact_email: string;
-  created_at?: string; // Optional as it's auto-generated
+export async function getEmployerInquiries(): Promise<EmployerInquiry[]> {
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EMPLOYER_INQUIRIES.BASE}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch inquiries');
+  }
+  return response.json();
 }
 
-export const submitEmployerInquiry = async (inquiry: Omit<EmployerInquiry, 'id' | 'created_at'>) => {
-  try {
-    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EMPLOYER_INQUIRIES.BASE}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...inquiry,
-        agency_id: 1 // Default agency ID
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to submit inquiry');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error submitting employer inquiry:', error);
-    throw error;
+export async function submitEmployerInquiry(inquiry: Omit<EmployerInquiry, 'id' | 'created_at'>): Promise<EmployerInquiry> {
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EMPLOYER_INQUIRIES.BASE}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(inquiry),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to submit inquiry');
   }
-}; 
+  return response.json();
+}
+
+export async function getEmployerInquiryById(id: number): Promise<EmployerInquiry> {
+  const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EMPLOYER_INQUIRIES.BASE}/${id}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch inquiry');
+  }
+  return response.json();
+} 

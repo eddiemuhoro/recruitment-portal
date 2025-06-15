@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './pages/Login';
 import Layout from './components/layout/Layout';
@@ -11,6 +12,18 @@ import JobApplicationFormWrapper from './components/application/JobApplicationFo
 import AdminDashboard from './components/admin/AdminDashboard';
 import { useState } from 'react';
 import type { JobApplication } from './types';
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // Data is considered fresh for 5 minutes
+      gcTime: 1000 * 60 * 30, // Cache is kept for 30 minutes
+      retry: 1, // Only retry failed requests once
+      refetchOnWindowFocus: false, // Don't refetch when window regains focus
+    },
+  },
+});
 
 function App() {
   const [applications, setApplications] = useState<JobApplication[]>([]);
@@ -24,33 +37,35 @@ function App() {
   };
 
   return (
-    <AuthProvider>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Services />} />
-            <Route path="/jobs" element={<JobList />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/partner" element={<Partner />} />
-            <Route
-              path="/jobs/:job_id/apply"
-              element={<JobApplicationFormWrapper />}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard
-                    onApplicationStatusChange={handleApplicationStatusChange}
-                  />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Layout>
-      </Router>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Services />} />
+              <Route path="/jobs" element={<JobList />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/partner" element={<Partner />} />
+              <Route
+                path="/jobs/:job_id/apply"
+                element={<JobApplicationFormWrapper />}
+              />
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <AdminDashboard
+                      onApplicationStatusChange={handleApplicationStatusChange}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Layout>
+        </Router>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

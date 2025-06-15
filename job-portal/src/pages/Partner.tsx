@@ -101,6 +101,8 @@ const Partner: React.FC = () => {
     employer_name: '',
     contact_email: '',
     message: '',
+    phone_number: '',
+    is_urgent: false,
     agency_id: 1 // Default agency ID
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -116,6 +118,8 @@ const Partner: React.FC = () => {
         employer_name: formData.employer_name,
         contact_email: formData.contact_email,
         message: formData.message,
+        phone_number: formData.phone_number,
+        is_urgent: formData.is_urgent,
         agency_id: formData.agency_id
       });
       setSubmitStatus('success');
@@ -123,6 +127,8 @@ const Partner: React.FC = () => {
         employer_name: '',
         contact_email: '',
         message: '',
+        phone_number: '',
+        is_urgent: false,
         agency_id: 1
       });
     } catch (error) {
@@ -132,12 +138,9 @@ const Partner: React.FC = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const value = e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   return (
@@ -385,6 +388,35 @@ const Partner: React.FC = () => {
                     className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="business@company.com"
                   />
+                </div>
+
+                <div>
+                  <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number (Optional)
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone_number"
+                    name="phone_number"
+                    value={formData.phone_number}
+                    onChange={handleChange}
+                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="+1234567890"
+                  />
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="is_urgent"
+                    name="is_urgent"
+                    checked={formData.is_urgent}
+                    onChange={handleChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="is_urgent" className="ml-2 block text-sm text-gray-700">
+                    This is an urgent requirement
+                  </label>
                 </div>
               </div>
 

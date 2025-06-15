@@ -1,29 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Job } from '../../types';
 import { Link } from 'react-router-dom';
 import { getJobs } from '../../api/jobs';
 import JobDetailsModal from './JobDetailsModal';
+import { useQuery } from '@tanstack/react-query';
+
+const ITEMS_PER_PAGE = 10;
 
 export default function JobList() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    const loadJobs = async () => {
-      try {
-        const data = await getJobs();
-        setJobs(data.filter(job => job.status !== 'draft'));
-      } catch (err) {
-        setError('Failed to load jobs');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: jobs = [], isLoading, error } = useQuery({
+    queryKey: ['jobs'],
+    queryFn: getJobs,
+    select: (data) => data.filter(job => job.status !== 'draft'),
+  });
 
-    loadJobs();
-  }, []);
+  // Calculate pagination
+  const totalPages = Math.ceil(jobs.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedJobs = jobs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const getStatusBadge = (status: Job['status']) => {
     switch (status) {
@@ -46,7 +43,7 @@ export default function JobList() {
     }
   };
 
-  if (loading) return (
+  if (isLoading) return (
     <div className="flex justify-center items-center min-h-[400px]">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
     </div>
@@ -54,7 +51,7 @@ export default function JobList() {
   
   if (error) return (
     <div className="text-center text-red-600 p-4 bg-red-50 rounded-lg">
-      {error}
+      {error instanceof Error ? error.message : 'Failed to load jobs'}
     </div>
   );
   
@@ -65,17 +62,16 @@ export default function JobList() {
   );
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-        {jobs.map((job) => (
-          <div 
-            key={job.id} 
-            className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 ${
+    <div className="space-y-6">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {paginatedJobs.map((job) => (
+          <div
+            key={job.id}
+  className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 ${
               job.status === 'closed' ? 'opacity-75' : 'cursor-pointer'
-            }`}
-            onClick={() => job.status !== 'closed' && setSelectedJob(job)}
+            }`}         
           >
-            <div className="p-5">
+            <div className="p-5" >
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1">
@@ -108,7 +104,8 @@ export default function JobList() {
                 {job.description}
               </p>
 
-              <div className="mb-4">
+              <div className="mb-4"                onClick={() => setSelectedJob(job)}
+              >
                 <h3 className="text-xs font-medium text-gray-900 mb-2">Key Requirements:</h3>
                 <ul className="text-xs text-gray-600 space-y-1">
                   {job.requirements.slice(0, 2).map((req: string, index: number) => (
@@ -145,11 +142,35 @@ export default function JobList() {
         ))}
       </div>
 
-      <JobDetailsModal
-        job={selectedJob}
-        isOpen={selectedJob !== null}
-        onClose={() => setSelectedJob(null)}
-      />
-    </>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center space-x-2 mt-8">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2 text-sm text-gray-700">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
+      {selectedJob && (
+        <JobDetailsModal
+          job={selectedJob}
+          onClose={() => setSelectedJob(null)}
+        />
+      )}
+    </div>
   );
 } 
