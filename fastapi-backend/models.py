@@ -38,6 +38,7 @@ class Agency(Base):
     website_url = Column(String)
 
     users = relationship("User", back_populates="agency")
+    inquiries = relationship("EmployerInquiry", back_populates="agency")
 
 class User(Base):
     __tablename__ = "users"
@@ -83,4 +84,16 @@ class JobApplication(Base):
     status = Column(Enum(ApplicationStatus), default=ApplicationStatus.PENDING)
     applied_date = Column(DateTime, default=datetime.utcnow)
 
-    job = relationship("Job", back_populates="applications") 
+    job = relationship("Job", back_populates="applications")
+
+class EmployerInquiry(Base):
+    __tablename__ = "employer_inquiries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    agency_id = Column(Integer, ForeignKey("agencies.id"), nullable=False)
+    employer_name = Column(String, nullable=False)
+    message = Column(Text, nullable=False)
+    contact_email = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    agency = relationship("Agency", back_populates="inquiries") 

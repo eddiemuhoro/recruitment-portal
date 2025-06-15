@@ -68,4 +68,20 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    email: Optional[str] = None 
+    email: Optional[str] = None
+
+class EmployerInquiryBase(BaseModel):
+    employer_name: str
+    message: str
+    contact_email: EmailStr
+    agency_id: int
+
+class EmployerInquiryCreate(EmployerInquiryBase):
+    pass
+
+class EmployerInquiry(EmployerInquiryBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True 
