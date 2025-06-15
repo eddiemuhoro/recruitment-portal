@@ -11,5 +11,8 @@ export const API_CONFIG = {
     JOBS: {
       BASE: '/jobs',
     },
+    EMPLOYER_INQUIRIES: {
+      BASE: '/employer-inquiries',
+    },
   },
 } as const; 

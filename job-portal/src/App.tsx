@@ -6,6 +6,7 @@ import Layout from './components/layout/Layout';
 import Services from './pages/Services';
 import JobList from './components/jobs/JobList';
 import Contact from './pages/Contact';
+import Partner from './pages/Partner';
 import JobApplicationFormWrapper from './components/application/JobApplicationFormWrapper.tsx';
 import AdminDashboard from './components/admin/AdminDashboard';
 import { useState } from 'react';
@@ -30,6 +31,7 @@ function App() {
             <Route path="/" element={<Services />} />
             <Route path="/jobs" element={<JobList />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/partner" element={<Partner />} />
             <Route
               path="/jobs/:job_id/apply"
               element={<JobApplicationFormWrapper />}

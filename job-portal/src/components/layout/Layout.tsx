@@ -23,6 +23,12 @@ export default function Layout({ children }: LayoutProps) {
                   Jobs
                 </Link>
                 <Link 
+                  to="/partner" 
+                  className="text-gray-900 inline-flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 hover:text-blue-600"
+                >
+                  Partner with Us
+                </Link>
+                <Link 
                   to="/dashboard" 
                   className="text-gray-900 inline-flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 hover:text-blue-600"
                 >
