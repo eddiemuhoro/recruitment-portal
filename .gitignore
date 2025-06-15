@@ -90,7 +90,6 @@ lib64/
 parts/
 sdist/
 flask-api/
-admin-portal/
 var/
 wheels/
 *.egg-info/
