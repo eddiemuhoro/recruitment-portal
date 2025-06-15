@@ -12,6 +12,7 @@ import JobApplicationFormWrapper from './components/application/JobApplicationFo
 import AdminDashboard from './components/admin/AdminDashboard';
 import { useState } from 'react';
 import type { JobApplication } from './types';
+import Home from './pages/Home.tsx';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -42,7 +43,7 @@ function App() {
         <Router>
           <Layout>
             <Routes>
-              <Route path="/" element={<Services />} />
+              <Route path="/" element={<Home />} />
               <Route path="/jobs" element={<JobList />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/partner" element={<Partner />} />
