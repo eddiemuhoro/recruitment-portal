@@ -2,8 +2,7 @@ import uvicorn
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database import engine
-from models import Base
+from database import engine, Base, cleanup
 from routers import jobs, applications, auth, employer_inquiries
 
 # Create database tables
@@ -25,6 +24,11 @@ app.include_router(jobs.router, prefix="/api", tags=["jobs"])
 app.include_router(applications.router, prefix="/api", tags=["applications"])
 app.include_router(auth.router, prefix="/api", tags=["auth"])
 app.include_router(employer_inquiries.router, prefix="/api", tags=["employer-inquiries"])
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup database connections on application shutdown"""
+    cleanup()
 
 @app.get("/")
 def read_root():

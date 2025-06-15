@@ -74,6 +74,8 @@ class EmployerInquiryBase(BaseModel):
     employer_name: str
     message: str
     contact_email: EmailStr
+    phone_number: str | None = None
+    is_urgent: bool = False
     agency_id: int
 
 class EmployerInquiryCreate(EmployerInquiryBase):

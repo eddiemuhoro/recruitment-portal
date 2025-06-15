@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ARRAY, DateTime, ForeignKey, Enum, Date
+from sqlalchemy import Column, Integer, String, Text, ARRAY, DateTime, ForeignKey, Enum, Date, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
@@ -94,6 +94,8 @@ class EmployerInquiry(Base):
     employer_name = Column(String, nullable=False)
     message = Column(Text, nullable=False)
     contact_email = Column(String, nullable=False)
+    phone_number = Column(String, nullable=True)
+    is_urgent = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     agency = relationship("Agency", back_populates="inquiries") 
