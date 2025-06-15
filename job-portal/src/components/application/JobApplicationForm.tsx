@@ -16,13 +16,34 @@ export default function JobApplicationForm({ job, onSubmit }: JobApplicationForm
   });
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    
+    if (name === 'email') {
+      if (!validateEmail(value)) {
+        setEmailError('Please enter a valid email address (e.g., user@domain.com)');
+      } else {
+        setEmailError(null);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (emailError) {
+      alert('Please fix the email format before submitting');
+      return;
+    }
+
     const form = e.currentTarget;
     const formData = new FormData(form);
     
@@ -77,10 +98,13 @@ export default function JobApplicationForm({ job, onSubmit }: JobApplicationForm
           id="email"
           name="email"
           required
-          className="input-field mt-1"
+          className={`input-field mt-1 ${emailError ? 'border-red-500' : ''}`}
           value={formData.email}
           onChange={handleChange}
         />
+        {emailError && (
+          <p className="mt-1 text-sm text-red-500">{emailError}</p>
+        )}
       </div>
 
       <div>
