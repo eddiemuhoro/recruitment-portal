@@ -21,15 +21,10 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex justify-between h-20">
             <div className="flex items-center space-x-8">
               <Link to="/" className="flex items-center">
-                <span className="text-2xl font-bold text-blue-600">Skyways Global</span>
+                <span className="text-2xl font-bold text-blue-600">EdMax</span>
               </Link>
               <div className="hidden md:flex items-center space-x-6">
-                <Link 
-                  to="/jobs" 
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Jobs
-                </Link>
+                
                 <Link 
                   to="/services" 
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
@@ -37,10 +32,28 @@ export default function Layout({ children }: LayoutProps) {
                   Services
                 </Link>
                 <Link 
+                  to="/jobs" 
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                >
+                  Jobs
+                </Link>
+                <Link 
                   to="/partner" 
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
-                  Partner with Us
+                  Employers
+                </Link>
+                <Link 
+                  to="/candidates" 
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                >
+                  Candidates
+                </Link>
+                <Link 
+                  to="/contact" 
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                >
+                  Contact Us
                 </Link>
               </div>
             </div>
@@ -111,7 +124,21 @@ export default function Layout({ children }: LayoutProps) {
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Partner with Us
+              Employers
+            </Link>
+            <Link
+              to="/candidates"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Candidates
+            </Link>
+            <Link
+              to="/contact"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Contact Us
             </Link>
             {/* <Link
               to="/login"

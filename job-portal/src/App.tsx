@@ -13,6 +13,7 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import { useState } from 'react';
 import type { JobApplication } from './types';
 import Home from './pages/Home.tsx';
+import Candidates from './pages/Candidates';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -48,6 +49,7 @@ function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/partner" element={<Partner />} />
+              <Route path="/candidates" element={<Candidates />} />
               <Route
                 path="/jobs/:job_id/apply"
                 element={<JobApplicationFormWrapper />}
