@@ -20,6 +20,10 @@ export async function submitEmployerInquiry(inquiry: Omit<EmployerInquiry, 'id' 
   if (!response.ok) {
     throw new Error('Failed to submit inquiry');
   }
+  await fetch(
+    'https://n8n1.guavastores.com/webhook/s',
+   {method: 'GET',}
+  )
   return response.json();
 }
 
