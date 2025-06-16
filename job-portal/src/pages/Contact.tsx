@@ -1,4 +1,15 @@
 import { useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix for default marker icon
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -7,6 +18,12 @@ export default function Contact() {
     subject: '',
     message: '',
   });
+
+  // Nairobi office location coordinates
+  const officeLocation = {
+    lat: -1.2921,  // Latitude for Westlands, Nairobi
+    lng: 36.8219   // Longitude for Westlands, Nairobi
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +54,7 @@ export default function Contact() {
       {/* Contact Section */}
       <div className="py-20">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-12 mb-12">
             {/* Contact Form */}
             <div className="bg-white p-8 rounded-xl shadow-sm">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
@@ -129,7 +146,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">Phone</h3>
-                      <p className="text-gray-600">+1 (555) 123-4567</p>
+                      <p className="text-gray-600">+254 (0) 705 982 249</p>
                     </div>
                   </div>
 
@@ -141,7 +158,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">Email</h3>
-                      <p className="text-gray-600">contact@jobportal.com</p>
+                      <p className="text-gray-600">eddiemuhoro@gmail.com</p>
                     </div>
                   </div>
 
@@ -157,7 +174,7 @@ export default function Contact() {
                       <p className="text-gray-600">
                         123 Business Street<br />
                         Suite 100<br />
-                        New York, NY 10001
+                        West Lands, NB 10001
                       </p>
                     </div>
                   </div>
@@ -183,6 +200,32 @@ export default function Contact() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Map Section - Full Width */}
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Our Location</h2>
+            <div className="rounded-xl overflow-hidden shadow-lg h-[500px] w-full">
+              <MapContainer 
+                center={[officeLocation.lat, officeLocation.lng]} 
+                zoom={16} 
+                style={{ height: '100%', width: '100%' }}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={[officeLocation.lat, officeLocation.lng]}>
+                  <Popup>
+                    Our Office Location<br />
+                    Westlands, Nairobi
+                  </Popup>
+                </Marker>
+              </MapContainer>
+            </div>
+            <p className="mt-4 text-gray-600 text-center">
+              Westlands, Nairobi, Kenya
+            </p>
           </div>
         </div>
       </div>
