@@ -4,7 +4,7 @@ import type { Job } from '../../types';
 import JobApplicationForm from './JobApplicationForm';
 import { fetchJobById } from '../../api/jobs';
 import { createApplication } from '../../api/applications';
-import { FaShare, FaBuilding, FaMapMarkerAlt, FaClock, FaMoneyBillWave } from 'react-icons/fa';
+import { FaShare, FaBuilding, FaMapMarkerAlt, FaClock, FaMoneyBillWave, FaFacebook } from 'react-icons/fa';
 
 export default function JobApplicationFormWrapper() {
   const { job_id } = useParams();
@@ -62,6 +62,28 @@ export default function JobApplicationFormWrapper() {
     }
   };
 
+  const handleFacebookShare = async () => {
+    if (!job) return;
+    
+    const shareText = `Check out this ${job.type} position at ${job.company}: ${job.title} in ${job.location}. Apply now!`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: job.title,
+          text: shareText,
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.error('Error sharing:', err);
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+      window.open(shareUrl, 'facebook-share-dialog', 'width=800,height=600');
+    }
+  };
+
   if (loading) return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -94,18 +116,27 @@ export default function JobApplicationFormWrapper() {
                   <span>{job.company}</span>
                 </div>
               </div>
-              <button
-                onClick={handleShare}
-                className="flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors relative"
-              >
-                <FaShare className="mr-2" />
-                Share
-                {showShareTooltip && (
-                  <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2">
-                    Link copied!
-                  </span>
-                )}
-              </button>
+              <div className="flex space-x-4">
+                <button
+                  onClick={handleShare}
+                  className="flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors relative"
+                >
+                  <FaShare className="mr-2" />
+                  Share
+                  {showShareTooltip && (
+                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2">
+                      Link copied!
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={handleFacebookShare}
+                  className="flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  <FaFacebook className="mr-2" />
+                  Share
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
