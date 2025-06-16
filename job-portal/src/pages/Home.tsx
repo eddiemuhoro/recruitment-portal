@@ -26,16 +26,16 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                to="/post-job"
+                to="/jobs"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 text-center"
               >
-                Post a Job
+                Find Jobs
               </Link>
               <Link
-                to="/jobs"
+                to="/contact"
                 className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-200 text-center"
               >
-                Find Talent
+                Contact Us
               </Link>
             </div>
           </div>
