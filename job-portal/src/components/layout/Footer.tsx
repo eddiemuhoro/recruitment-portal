@@ -64,10 +64,10 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-400">
-              <li>Email: info@skyways.com</li>
-              <li>Phone: +1 (555) 123-4567</li>
+              <li>Email: eddiemuhoro@gmail.com</li>
+              <li>Phone: +254 (0) 705 982 249</li>
               <li>Address: 123 Business Ave, Suite 100</li>
-              <li>City, State 12345</li>
+              <li>Westlands, Nairobi 00100</li>
             </ul>
           </div>
 
