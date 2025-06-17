@@ -50,6 +50,12 @@ export default function Layout({ children }: LayoutProps) {
                   Candidates
                 </Link>
                 <Link 
+                  to="/ai-features" 
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                >
+                  AI Assistant
+                </Link>
+                <Link 
                   to="/contact" 
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
@@ -132,6 +138,13 @@ export default function Layout({ children }: LayoutProps) {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Candidates
+            </Link>
+            <Link
+              to="/ai-features"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              AI Assistant
             </Link>
             <Link
               to="/contact"
