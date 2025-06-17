@@ -14,6 +14,7 @@ import { useState } from 'react';
 import type { JobApplication } from './types';
 import Home from './pages/Home.tsx';
 import Candidates from './pages/Candidates';
+import AIFeatures from './pages/AIFeatures';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -50,6 +51,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/partner" element={<Partner />} />
               <Route path="/candidates" element={<Candidates />} />
+              <Route path="/ai-features" element={<AIFeatures />} />
               <Route
                 path="/jobs/:job_id/apply"
                 element={<JobApplicationFormWrapper />}
