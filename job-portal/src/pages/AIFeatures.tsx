@@ -23,7 +23,7 @@ const AIFeatures: React.FC = () => {
 
         <div className="space-y-12">
           {/* Smart Search Section */}
-          <section className="bg-white rounded-lg shadow-lg p-6">
+          {/* <section className="bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               Smart Search
             </h2>
@@ -31,7 +31,7 @@ const AIFeatures: React.FC = () => {
               Use natural language to search for jobs. Our AI will understand your intent and find the most relevant positions.
             </p>
             <AISmartSearch onSearch={handleSearch} />
-          </section>
+          </section> */}
 
           {/* AI Chat Assistant Section */}
           <section className="bg-white rounded-lg shadow-lg p-6">
