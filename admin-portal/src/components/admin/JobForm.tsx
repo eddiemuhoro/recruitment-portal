@@ -22,7 +22,7 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
 
   useEffect(() => {
     if (job) {
-      const { id, postedAt, ...jobData } = job;
+      const { id, posted_date, ...jobData } = job;
       setFormData(jobData);
     }
   }, [job]);

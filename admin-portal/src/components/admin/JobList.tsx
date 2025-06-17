@@ -53,7 +53,7 @@ export default function JobList({ jobs, onEdit, onDelete, onStatusChange }: JobL
                   {Number(Math.random().toFixed(2)) * 100} Applicants
                 </span>
                 <span className="text-sm text-gray-500">
-                  Posted {new Date(job.postedAt).toLocaleDateString()}
+                  Posted {new Date(job.posted_date).toLocaleDateString()}
                 </span>
               </div>
             </div>
