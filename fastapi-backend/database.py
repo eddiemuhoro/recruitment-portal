@@ -6,6 +6,7 @@ from sqlalchemy.pool import QueuePool
 from dotenv import load_dotenv
 import logging
 import time
+from contextlib import contextmanager
 
 load_dotenv()
 
@@ -19,8 +20,8 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 engine = create_engine(
     DATABASE_URL,
     poolclass=QueuePool,
-    pool_size=1,  # Reduced to 1 to stay within Supabase limits
-    max_overflow=2,  # Allow 2 additional connections
+    pool_size=1,  # Keep at 1 to stay within Supabase limits
+    max_overflow=1,  # Reduced to 1 to prevent connection spikes
     pool_timeout=30,  # Wait up to 30 seconds for a connection
     pool_recycle=300,  # Recycle connections every 5 minutes
     pool_pre_ping=True,  # Enable connection health checks
@@ -49,15 +50,25 @@ def receive_checkin(dbapi_connection, connection_record):
     """Log when a connection is returned to the pool"""
     logging.info('Connection returned to pool')
 
+@contextmanager
+def get_db_session():
+    """Context manager for database sessions with proper cleanup"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+        SessionLocal.remove()
+
 def get_db():
     """Get database session with proper cleanup and retry logic"""
-    db = SessionLocal()
     max_retries = 3
     retry_delay = 1  # seconds
     
     for attempt in range(max_retries):
         try:
-            yield db
+            with get_db_session() as db:
+                yield db
             break
         except Exception as e:
             if attempt == max_retries - 1:  # Last attempt
@@ -65,9 +76,6 @@ def get_db():
             logging.warning(f"Database connection attempt {attempt + 1} failed, retrying in {retry_delay} seconds...")
             time.sleep(retry_delay)
             retry_delay *= 2  # Exponential backoff
-        finally:
-            db.close()
-            SessionLocal.remove()  # Remove the session from the registry
 
 # Cleanup function to be called during application shutdown
 def cleanup():
