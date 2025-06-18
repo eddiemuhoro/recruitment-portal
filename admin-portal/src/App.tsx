@@ -3,6 +3,7 @@ import Navbar from './components/layout/Navbar';
 import JobsPage from './pages/JobsPage';
 import ApplicationsPage from './pages/ApplicationsPage';
 import InquiriesPage from './pages/InquiriesPage';
+import { DashboardPage } from './pages/DashboardPage';
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
         <Navbar />
         <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <Routes>
-            <Route path="/" element={<Navigate to="/jobs" replace />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/applications" element={<ApplicationsPage />} />
             <Route path="/inquiries" element={<InquiriesPage />} />
