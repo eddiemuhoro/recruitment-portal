@@ -67,6 +67,7 @@ class Job(Base):
     posted_date = Column(DateTime, default=datetime.utcnow)
     status = Column(Enum(JobStatus), default=JobStatus.ACTIVE)
     employer_id = Column(Integer, ForeignKey("users.id"))
+    passport_required = Column(Boolean, default=False)
 
     employer = relationship("User", back_populates="jobs")
     applications = relationship("JobApplication", back_populates="job")
@@ -81,6 +82,7 @@ class JobApplication(Base):
     phone = Column(String, nullable=False)
     cv_url = Column(String, nullable=False)
     cover_letter = Column(Text, nullable=False)
+    passport_number = Column(String, nullable=True)
     status = Column(Enum(ApplicationStatus), default=ApplicationStatus.PENDING)
     applied_date = Column(DateTime, default=datetime.utcnow)
 

@@ -26,6 +26,7 @@ class JobBase(BaseModel):
     requirements: List[str]
     salary: str
     status: Optional[JobStatus] = JobStatus.ACTIVE
+    passport_required: bool = False
 
 class JobCreate(JobBase):
     employer_id: int
@@ -45,6 +46,7 @@ class JobApplicationBase(BaseModel):
     phone: str
     cover_letter: str
     cv_url: str
+    passport_number: str | None = None
     status: ApplicationStatus = ApplicationStatus.PENDING
     applied_date: datetime = Field(default_factory=datetime.utcnow)
 
