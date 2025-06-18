@@ -92,12 +92,12 @@ export interface EmployerAnalytics {
 export const analyticsApi = {
   // Dashboard
   getDashboardMetrics: async (agencyId: number): Promise<DashboardMetrics> => {
-    return apiClient<DashboardMetrics>(API_CONFIG.ENDPOINTS.ANALYTICS.DASHBOARD(agencyId), { requiresAuth: true });
+    return apiClient<DashboardMetrics>(API_CONFIG.ENDPOINTS.ANALYTICS.DASHBOARD(agencyId));
   },
 
   // Revenue
   getRevenueAnalytics: async (agencyId: number): Promise<RevenueAnalytics> => {
-    return apiClient<RevenueAnalytics>(API_CONFIG.ENDPOINTS.ANALYTICS.REVENUE(agencyId), { requiresAuth: true });
+    return apiClient<RevenueAnalytics>(API_CONFIG.ENDPOINTS.ANALYTICS.REVENUE(agencyId));
   },
 
  
