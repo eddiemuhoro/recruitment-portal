@@ -14,5 +14,10 @@ export const API_CONFIG = {
     EMPLOYER_INQUIRIES: {
       BASE: '/employer-inquiries',
     },
+    ANALYTICS: {
+      BASE: '/agency-analytics',
+      DASHBOARD: (id: number) => `/agency-analytics/${id}/dashboard`,
+      REVENUE: (id: number) => `/agency-analytics/${id}/revenue`,
+    },
   },
 } as const; 

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { agencyAnalyticsApi } from '../api/agencyAnalytics';
-import type { DashboardData, RevenueData } from '../api/agencyAnalytics';
+import { analyticsApi } from '../api/analytics';
+import type { DashboardMetrics, RevenueAnalytics } from '../api/analytics';
 import {
   Card,
   CardContent,
@@ -59,8 +59,7 @@ const MetricCard = ({ title, value, trend, description }: { title: string; value
 );
 
 export const DashboardPage = () => {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [revenueData, setRevenueData] = useState<RevenueData | null>(null);
+  const [dashboardData, setDashboardData] = useState<DashboardMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(), new Date()]);
@@ -70,12 +69,8 @@ export const DashboardPage = () => {
   const fetchData = useCallback(async () => {
     try {
       const agencyId = 1; // TODO: Get from auth context
-      const [dashboard, revenue] = await Promise.all([
-        agencyAnalyticsApi.getDashboard(agencyId),
-        agencyAnalyticsApi.getRevenue(agencyId),
-      ]);
+      const dashboard = await analyticsApi.getDashboardMetrics(agencyId);
       setDashboardData(dashboard);
-      setRevenueData(revenue);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch dashboard data');
     } finally {
