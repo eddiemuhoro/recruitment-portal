@@ -39,6 +39,7 @@ export default function JobApplicationFormWrapper() {
         phone: formData.get('phone') as string,
         cv_url: formData.get('cv_url') as string,
         cover_letter: formData.get('cover_letter') as string,
+        passport_number: formData.get('passport_number') as string || null,
         status: 'pending' as const,
         applied_date: new Date().toISOString(),
       };

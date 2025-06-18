@@ -7,6 +7,7 @@ interface ApplicationFiltersProps {
     dateRange: { start: string; end: string };
     selectedJob: string;
     skills: string;
+    passportStatus: 'all' | 'has' | 'missing';
   };
   onFilterChange: (filters: ApplicationFiltersProps['filters']) => void;
   onReset: () => void;
@@ -41,6 +42,21 @@ export default function ApplicationFilters({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Passport Status
+          </label>
+          <select
+            value={filters.passportStatus}
+            onChange={(e) => handleChange('passportStatus', e.target.value as 'all' | 'has' | 'missing')}
+            className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="all">All Applications</option>
+            <option value="has">With Passport</option>
+            <option value="missing">Without Passport</option>
+          </select>
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Job Position

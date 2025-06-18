@@ -17,6 +17,8 @@ export type Job = {
   requirements: string[];
   salary: string;
   status: 'active' | 'closed' | 'draft';
+  passport_required?: boolean;
+
   employer_id: number;
   posted_date: string;
 };
@@ -29,6 +31,8 @@ export type JobApplication = {
   phone: string;
   cv_url: string;
   cover_letter: string;
+  has_passport?: boolean;
+  passport_number?: string | null;
   status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
   applied_date: string;
 };

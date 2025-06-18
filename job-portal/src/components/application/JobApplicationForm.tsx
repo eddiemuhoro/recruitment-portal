@@ -13,10 +13,12 @@ export default function JobApplicationForm({ job, onSubmit }: JobApplicationForm
     email: '',
     phone: '',
     cover_letter: '',
+    passport_number: '',
   });
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [passportError, setPassportError] = useState<string | null>(null);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,21 +45,26 @@ export default function JobApplicationForm({ job, onSubmit }: JobApplicationForm
       alert('Please fix the email format before submitting');
       return;
     }
-
+    if (job.passport_required && !formData.passport_number) {
+      setPassportError('Please enter your passport number.');
+      return;
+    }
+    setPassportError(null);
     const form = e.currentTarget;
-    const formData = new FormData(form);
+    const formDataObj = new FormData(form);
+    formDataObj.set('passport_number', formData.passport_number);
     
     try {
       setIsUploading(true);
       setUploadError(null);
       
-      const cvFile = formData.get('cv') as File;
+      const cvFile = formDataObj.get('cv') as File;
       if (cvFile) {
         const cvUrl = await uploadFile(cvFile);
-        formData.set('cv_url', cvUrl);
+        formDataObj.set('cv_url', cvUrl);
       }
       
-      onSubmit(formData);
+      onSubmit(formDataObj);
     } catch (error) {
       setUploadError('Failed to upload CV. Please try again.');
     } finally {
@@ -120,6 +127,23 @@ export default function JobApplicationForm({ job, onSubmit }: JobApplicationForm
           value={formData.phone}
           onChange={handleChange}
         />
+      </div>
+
+      <div>
+        <label htmlFor="passport_number" className="block text-sm font-medium text-gray-700">
+          Passport Number {job.passport_required && <span className="text-red-500">*</span>}
+        </label>
+        <input
+          type="text"
+          id="passport_number"
+          name="passport_number"
+          required={job.passport_required}
+          className="input-field mt-1"
+          value={formData.passport_number}
+          onChange={handleChange}
+          placeholder={job.passport_required ? "Required for this position" : "Optional"}
+        />
+        {passportError && <p className="mt-1 text-sm text-red-500">{passportError}</p>}
       </div>
 
       <div>

@@ -24,7 +24,7 @@ export interface JobCreate {
   status: 'active' | 'closed';
 }
 
-export interface JobApplication {
+export type JobApplication = {
   id: string;
   job_id: string;
   applicant_name: string;
@@ -32,11 +32,13 @@ export interface JobApplication {
   phone: string;
   cv_url: string;
   cover_letter: string;
+  has_passport: boolean;
+  passport_number?: string | null;
   status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
   applied_date: string;
   ai_score?: number;
   skills?: string[];
-}
+};
 
 export interface EmployerInquiry {
   id: string;

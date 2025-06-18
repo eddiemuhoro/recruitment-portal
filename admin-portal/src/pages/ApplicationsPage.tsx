@@ -20,6 +20,7 @@ export default function ApplicationsPage() {
     dateRange: { start: '', end: '' },
     selectedJob: '',
     skills: '',
+    passportStatus: 'all' as 'all' | 'has' | 'missing'
   });
 
   useEffect(() => {
@@ -90,8 +91,12 @@ export default function ApplicationsPage() {
         new Date(application.applied_date) >= new Date(filters.dateRange.start)) &&
       (!filters.dateRange.end ||
         new Date(application.applied_date) <= new Date(filters.dateRange.end));
+    const matchesPassport = 
+      filters.passportStatus === 'all' || 
+      (filters.passportStatus === 'has' && application.passport_number) ||
+      (filters.passportStatus === 'missing' && !application.passport_number);
 
-    return matchesStatus && matchesJob && matchesScore && matchesSkills && matchesDate;
+    return matchesStatus && matchesJob && matchesScore && matchesSkills && matchesDate && matchesPassport;
   });
 
   const getStatusCount = (status: ApplicationStatus | 'all') => {
@@ -204,6 +209,7 @@ export default function ApplicationsPage() {
                 dateRange: { start: '', end: '' },
                 selectedJob: '',
                 skills: '',
+                passportStatus: 'all'
               })
             }
           />
@@ -320,6 +326,20 @@ export default function ApplicationsPage() {
                   <div>
                     <dt className="text-sm text-gray-500">Email</dt>
                     <dd className="text-sm text-gray-900">{selectedApplication.email}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-sm text-gray-500">Passport Number</dt>
+                    <dd className="text-sm text-gray-900">
+                      {selectedApplication.passport_number ? (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          {selectedApplication.passport_number}
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          Not provided
+                        </span>
+                      )}
+                    </dd>
                   </div>
                 </dl>
               </div>
