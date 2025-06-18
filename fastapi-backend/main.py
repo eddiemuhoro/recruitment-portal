@@ -3,7 +3,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base, cleanup
-from routers import jobs, applications, auth, employer_inquiries
+from routers import jobs, applications, auth, employer_inquiries, agency_analytics
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -24,6 +24,7 @@ app.include_router(jobs.router, prefix="/api", tags=["jobs"])
 app.include_router(applications.router, prefix="/api", tags=["applications"])
 app.include_router(auth.router, prefix="/api", tags=["auth"])
 app.include_router(employer_inquiries.router, prefix="/api", tags=["employer-inquiries"])
+app.include_router(agency_analytics.router, prefix="/api", tags=["agency-analytics"])
 
 @app.on_event("shutdown")
 async def shutdown_event():
