@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import { useState } from 'react';
+import AIChatWidget from '../AIChatWidget';
 
 interface LayoutProps {
   children: ReactNode;
@@ -175,6 +176,7 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
       <Footer />
+      <AIChatWidget />
     </div>
   );
 } 
