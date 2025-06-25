@@ -8,7 +8,12 @@ from routers import jobs, applications, auth, employer_inquiries, agency_analyti
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    title="Job Portal API",
+    description="Skyways Global Recruitment Portal API",
+    version="1.0.0"
+)
+
 
 # Configure CORS
 app.add_middleware(
