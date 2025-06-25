@@ -26,6 +26,13 @@ venv/
 env/
 ENV/
 .env
+.env.local
+.env.development
+.env.production
+
+# Docker files with sensitive data
+fastapi-backend/docker-compose.yml
+docker-compose.override.yml
 
 # IDE
 .idea/
