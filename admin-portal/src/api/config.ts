@@ -1,23 +1,23 @@
 export const API_CONFIG = {
-  BASE_URL: 'https://skyways-five.vercel.app/api',
+  BASE_URL: "http://127.0.0.1:8000/api",
   ENDPOINTS: {
     AUTH: {
-      LOGIN: '/token',
+      LOGIN: "/token",
     },
     APPLICATIONS: {
-      BASE: '/applications',
+      BASE: "/applications",
       STATUS: (id: string) => `/applications/${id}/status`,
     },
     JOBS: {
-      BASE: '/jobs',
+      BASE: "/jobs",
     },
     EMPLOYER_INQUIRIES: {
-      BASE: '/employer-inquiries',
+      BASE: "/employer-inquiries",
     },
     ANALYTICS: {
-      BASE: '/agency-analytics',
+      BASE: "/agency-analytics",
       DASHBOARD: (id: number) => `/agency-analytics/${id}/dashboard`,
       REVENUE: (id: number) => `/agency-analytics/${id}/revenue`,
     },
   },
-} as const; 
+} as const;
