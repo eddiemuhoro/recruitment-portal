@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Job, JobCreate } from '../../types';
+import type { Job, JobCreate, DocumentType } from '../../types';
 
 interface JobFormProps {
   job?: Job;
@@ -17,11 +17,14 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
     requirements: [''],
     salary: '',
     status: 'active',
-    employer_id: 1 // Default employer_id for admin
+    employer_id: 1, // Default employer_id for admin
+    passport_required: false,
+    required_documents: ['cv']
   });
 
   useEffect(() => {
     if (job) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id, posted_date, ...jobData } = job;
       setFormData(jobData);
     }
@@ -55,6 +58,39 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
       ...prev,
       requirements: prev.requirements.filter((_, i) => i !== index),
     }));
+  };
+
+  const handlePassportRequiredChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, passport_required: e.target.checked }));
+  };
+
+  const handleRequiredDocumentChange = (document: DocumentType, checked: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      required_documents: checked
+        ? [...(prev.required_documents || []), document]
+        : (prev.required_documents || []).filter(doc => doc !== document)
+    }));
+  };
+
+  const documentTypes: DocumentType[] = ['cv', 'passport', 'birth_certificate', 'kcse_certificate', 'kcpe_certificate', 'certificate_of_good_conduct', 'academic_transcripts', 'professional_certificate', 'work_permit', 'police_clearance', 'medical_certificate', 'other'];
+
+  const getDocumentTypeLabel = (docType: DocumentType): string => {
+    const labels: Record<DocumentType, string> = {
+      cv: 'CV/Resume',
+      passport: 'Passport',
+      birth_certificate: 'Birth Certificate',
+      kcse_certificate: 'KCSE Certificate',
+      kcpe_certificate: 'KCPE Certificate',
+      certificate_of_good_conduct: 'Certificate of Good Conduct',
+      academic_transcripts: 'Academic Transcripts',
+      professional_certificate: 'Professional Certificate',
+      work_permit: 'Work Permit',
+      police_clearance: 'Police Clearance',
+      medical_certificate: 'Medical Certificate',
+      other: 'Other Documents'
+    };
+    return labels[docType] || docType;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -245,6 +281,45 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
           >
             Add Requirement
           </button>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center">
+          <input
+            id="passport_required"
+            name="passport_required"
+            type="checkbox"
+            checked={formData.passport_required}
+            onChange={handlePassportRequiredChange}
+            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label htmlFor="passport_required" className="ml-2 block text-sm font-medium text-gray-700">
+            Passport Required
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Required Documents
+        </label>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {documentTypes.map((docType) => (
+            <div key={docType} className="flex items-center">
+              <input
+                id={`doc_${docType}`}
+                name="required_documents"
+                type="checkbox"
+                checked={formData.required_documents?.includes(docType) || false}
+                onChange={(e) => handleRequiredDocumentChange(docType, e.target.checked)}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label htmlFor={`doc_${docType}`} className="ml-2 block text-sm text-gray-700">
+                {getDocumentTypeLabel(docType)}
+              </label>
+            </div>
+          ))}
         </div>
       </div>
 

@@ -10,6 +10,8 @@ export interface Job {
   employer_id: number;
   posted_date: string;
   status: 'active' | 'closed';
+  passport_required?: boolean;
+  required_documents?: DocumentType[];
 }
 
 export interface JobCreate {
@@ -22,6 +24,18 @@ export interface JobCreate {
   salary: string;
   employer_id: number;
   status: 'active' | 'closed';
+  passport_required?: boolean;
+  required_documents?: DocumentType[];
+}
+
+export type DocumentType = 'cv' | 'passport' | 'birth_certificate' | 'kcse_certificate' | 'kcpe_certificate' | 'certificate_of_good_conduct' | 'academic_transcripts' | 'professional_certificate' | 'work_permit' | 'police_clearance' | 'medical_certificate' | 'other';
+
+export interface ApplicationDocument {
+  id: number;
+  document_type: DocumentType;
+  document_url: string;
+  document_name: string;
+  uploaded_at: string;
 }
 
 export type JobApplication = {
@@ -30,14 +44,13 @@ export type JobApplication = {
   applicant_name: string;
   email: string;
   phone: string;
-  cv_url: string;
   cover_letter: string;
-  has_passport: boolean;
   passport_number?: string | null;
   status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
   applied_date: string;
   ai_score?: number;
   skills?: string[];
+  documents: ApplicationDocument[];
 };
 
 export interface EmployerInquiry {

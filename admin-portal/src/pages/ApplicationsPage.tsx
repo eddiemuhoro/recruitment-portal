@@ -23,6 +23,24 @@ export default function ApplicationsPage() {
     passportStatus: 'all' as 'all' | 'has' | 'missing'
   });
 
+  const getDocumentTypeLabel = (docType: string): string => {
+    const labels: Record<string, string> = {
+      cv: 'CV/Resume',
+      passport: 'Passport',
+      birth_certificate: 'Birth Certificate',
+      kcse_certificate: 'KCSE Certificate',
+      kcpe_certificate: 'KCPE Certificate',
+      certificate_of_good_conduct: 'Certificate of Good Conduct',
+      academic_transcripts: 'Academic Transcripts',
+      professional_certificate: 'Professional Certificate',
+      work_permit: 'Work Permit',
+      police_clearance: 'Police Clearance',
+      medical_certificate: 'Medical Certificate',
+      other: 'Other Documents'
+    };
+    return labels[docType] || docType;
+  };
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -362,26 +380,68 @@ export default function ApplicationsPage() {
               <p className="mt-2 text-sm text-gray-600 whitespace-pre-wrap">{selectedApplication.cover_letter}</p>
             </div>
             <div>
-              <a
-                href={selectedApplication.cv_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <svg
-                  className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Download CV
-              </a>
+              <h4 className="text-sm font-medium text-gray-900">
+                Documents ({selectedApplication.documents?.length || 0})
+              </h4>
+              {selectedApplication.documents && selectedApplication.documents.length > 0 ? (
+                <div className="mt-2 space-y-2">
+                  {selectedApplication.documents.map((document) => (
+                    <div 
+                      key={document.id}
+                      className="flex items-center justify-between p-3 border border-gray-200 rounded-md bg-gray-50"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="flex-shrink-0">
+                          <svg
+                            className="h-5 w-5 text-gray-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {document.document_name}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {getDocumentTypeLabel(document.document_type)} • Uploaded {new Date(document.uploaded_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                      <a
+                        href={document.document_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      >
+                        <svg
+                          className="-ml-1 mr-2 h-4 w-4 text-gray-400"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                        Download
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-2 text-sm text-gray-500">No documents uploaded</p>
+              )}
             </div>
           </div>
         )}
