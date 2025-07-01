@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
 from datetime import datetime
-from models import JobType, JobStatus, ApplicationStatus, UserRole
+from models import JobType, JobStatus, ApplicationStatus, UserRole, DocumentType
 
 class UserBase(BaseModel):
     name: str
@@ -27,6 +27,7 @@ class JobBase(BaseModel):
     salary: str
     status: Optional[JobStatus] = JobStatus.ACTIVE
     passport_required: bool = False
+    required_documents: Optional[List[DocumentType]] = None
 
 class JobCreate(JobBase):
     employer_id: int
@@ -39,28 +40,50 @@ class Job(JobBase):
     class Config:
         from_attributes = True
 
+# Document schemas
+class ApplicationDocumentCreate(BaseModel):
+    document_type: DocumentType
+    document_url: str
+    document_name: str
+
+class ApplicationDocumentResponse(BaseModel):
+    id: int
+    document_type: DocumentType
+    document_url: str
+    document_name: str
+    uploaded_at: datetime
+    
+    class Config:
+        from_attributes = True
+
 class JobApplicationBase(BaseModel):
     job_id: int
     applicant_name: str
     email: EmailStr
     phone: str
-    cover_letter: str
-    cv_url: str
+    cover_letter: Optional[str] = None
     passport_number: str | None = None
     status: ApplicationStatus = ApplicationStatus.PENDING
     applied_date: datetime = Field(default_factory=datetime.utcnow)
 
-class JobApplicationCreate(JobApplicationBase):
-    pass
+class JobApplicationCreate(BaseModel):
+    job_id: int
+    applicant_name: str
+    email: EmailStr
+    phone: str
+    cover_letter: Optional[str] = None
+    passport_number: str | None = None
+    documents: List[ApplicationDocumentCreate]
 
 class JobApplicationUpdate(BaseModel):
     status: str
 
 class JobApplication(JobApplicationBase):
     id: int
-    cv_url: str
     status: ApplicationStatus
     applied_date: datetime
+    cover_letter: Optional[str] = None
+    documents: Optional[List[ApplicationDocumentResponse]] = []
 
     class Config:
         from_attributes = True
@@ -88,4 +111,4 @@ class EmployerInquiry(EmployerInquiryBase):
     created_at: datetime
 
     class Config:
-        from_attributes = True 
+        from_attributes = True

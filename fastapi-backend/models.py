@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ARRAY, DateTime, ForeignKey, Enum, Date, Boolean
+from sqlalchemy import Column, Integer, String, Text, ARRAY, DateTime, ForeignKey, Enum, Date, Boolean, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
@@ -25,6 +25,20 @@ class UserRole(str, enum.Enum):
     ADMIN = "admin"
     EMPLOYER = "employer"
     USER = "user"
+
+class DocumentType(str, enum.Enum):
+    CV = "cv"
+    PASSPORT = "passport"
+    BIRTH_CERTIFICATE = "birth_certificate"
+    KCSE_CERTIFICATE = "kcse_certificate"
+    KCPE_CERTIFICATE = "kcpe_certificate"
+    CERTIFICATE_OF_GOOD_CONDUCT = "certificate_of_good_conduct"
+    ACADEMIC_TRANSCRIPTS = "academic_transcripts"
+    PROFESSIONAL_CERTIFICATE = "professional_certificate"
+    WORK_PERMIT = "work_permit"
+    POLICE_CLEARANCE = "police_clearance"
+    MEDICAL_CERTIFICATE = "medical_certificate"
+    OTHER = "other"
 
 class Agency(Base):
     __tablename__ = "agencies"
@@ -68,6 +82,7 @@ class Job(Base):
     status = Column(Enum(JobStatus), default=JobStatus.ACTIVE)
     employer_id = Column(Integer, ForeignKey("users.id"))
     passport_required = Column(Boolean, default=False)
+    required_documents = Column(JSON, nullable=True)  # Store array of required document types
 
     employer = relationship("User", back_populates="jobs")
     applications = relationship("JobApplication", back_populates="job")
@@ -80,13 +95,25 @@ class JobApplication(Base):
     applicant_name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     phone = Column(String, nullable=False)
-    cv_url = Column(String, nullable=False)
-    cover_letter = Column(Text, nullable=False)
+    cover_letter = Column(Text, nullable=True)
     passport_number = Column(String, nullable=True)
     status = Column(Enum(ApplicationStatus), default=ApplicationStatus.PENDING)
     applied_date = Column(DateTime, default=datetime.utcnow)
 
     job = relationship("Job", back_populates="applications")
+    documents = relationship("ApplicationDocument", back_populates="application")
+
+class ApplicationDocument(Base):
+    __tablename__ = "application_documents"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    application_id = Column(Integer, ForeignKey("job_applications.id"), nullable=False)
+    document_type = Column(Enum(DocumentType), nullable=False)
+    document_url = Column(String, nullable=False)
+    document_name = Column(String, nullable=False)  # Original filename
+    uploaded_at = Column(DateTime, default=datetime.utcnow)
+    
+    application = relationship("JobApplication", back_populates="documents")
 
 class EmployerInquiry(Base):
     __tablename__ = "employer_inquiries"
@@ -100,4 +127,4 @@ class EmployerInquiry(Base):
     is_urgent = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    agency = relationship("Agency", back_populates="inquiries") 
+    agency = relationship("Agency", back_populates="inquiries")
