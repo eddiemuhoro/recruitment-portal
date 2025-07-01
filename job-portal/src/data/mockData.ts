@@ -36,10 +36,18 @@ export const mockApplications: JobApplication[] = [
     applicant_name: 'John Doe',
     email: 'john@example.com',
     phone: '123-456-7890',
-    cv_url: '/cvs/john-doe-cv.pdf',
     cover_letter: 'I am excited to apply for this position...',
     status: 'pending',
     applied_date: '2024-03-16',
+    documents: [
+      {
+        id: 1,
+        document_type: 'cv',
+        document_url: '/cvs/john-doe-cv.pdf',
+        document_name: 'John Doe CV.pdf',
+        uploaded_at: '2024-03-16T10:00:00Z'
+      }
+    ]
   },
 ];
 

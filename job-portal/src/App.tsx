@@ -9,9 +9,6 @@ import JobList from './components/jobs/JobList';
 import Contact from './pages/Contact';
 import Partner from './pages/Partner';
 import JobApplicationFormWrapper from './components/application/JobApplicationFormWrapper.tsx';
-import AdminDashboard from './components/admin/AdminDashboard';
-import { useState } from 'react';
-import type { JobApplication } from './types';
 import Home from './pages/Home.tsx';
 import Candidates from './pages/Candidates';
 import AIFeatures from './pages/AIFeatures';
@@ -29,16 +26,6 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const [applications, setApplications] = useState<JobApplication[]>([]);
-
-  const handleApplicationStatusChange = (applicationId: string, status: string) => {
-    setApplications(prevApplications =>
-      prevApplications.map(app =>
-        app.id === applicationId ? { ...app, status: status as JobApplication['status'] } : app
-      )
-    );
-  };
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -57,16 +44,6 @@ function App() {
                 element={<JobApplicationFormWrapper />}
               />
               <Route path="/login" element={<Login />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <AdminDashboard
-                      onApplicationStatusChange={handleApplicationStatusChange}
-                    />
-                  </ProtectedRoute>
-                }
-              />
             </Routes>
           </Layout>
         </Router>
