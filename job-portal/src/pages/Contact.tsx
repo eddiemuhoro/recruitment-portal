@@ -43,8 +43,8 @@ export default function Contact() {
 
   // Nairobi office location coordinates
   const officeLocation = {
-    lat: -1.2921, // Latitude for Westlands, Nairobi
-    lng: 36.8219, // Longitude for Westlands, Nairobi
+    lat: -1.28212, // Latitude for Westlands, Nairobi
+    lng: 36.8193315, // Longitude for Westlands, Nairobi
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -311,7 +311,8 @@ export default function Contact() {
                       <h3 className="text-lg font-semibold text-gray-900">
                         Phone
                       </h3>
-                      <p className="text-gray-600">+254 (0) 705 982 249</p>
+                      <p className="text-gray-600">+254 723 464 058</p>
+                      <p className="text-gray-600">+254 722 839 848</p>
                     </div>
                   </div>
 
@@ -335,7 +336,7 @@ export default function Contact() {
                       <h3 className="text-lg font-semibold text-gray-900">
                         Email
                       </h3>
-                      <p className="text-gray-600">eddiemuhoro@gmail.com</p>
+                      <p className="text-gray-600">skywaysglobalhr@gmail.com</p>
                     </div>
                   </div>
 
@@ -366,11 +367,11 @@ export default function Contact() {
                         Address
                       </h3>
                       <p className="text-gray-600">
-                        123 Business Street
+                        Moktar Daddah Street
                         <br />
-                        Suite 100
+                        Ruprani Building, 2nd Floor, Room 207
                         <br />
-                        West Lands, NB 10001
+                        Nairobi CBD, Kenya
                       </p>
                     </div>
                   </div>
@@ -412,24 +413,26 @@ export default function Contact() {
             <div className="rounded-xl overflow-hidden shadow-lg h-[500px] w-full">
               <MapContainer
                 center={[officeLocation.lat, officeLocation.lng]}
-                zoom={16}
+                zoom={20}
                 style={{ height: "100%", width: "100%" }}
               >
                 <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.mapbox.com/">Mapbox</a> contributors'
+                  url={`https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=${
+                    import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
+                  }`}
                 />
                 <Marker position={[officeLocation.lat, officeLocation.lng]}>
                   <Popup>
                     Our Office Location
                     <br />
-                    Westlands, Nairobi
+                    Ruprani House, Nairobi
                   </Popup>
                 </Marker>
               </MapContainer>
             </div>
             <p className="mt-4 text-gray-600 text-center">
-              Westlands, Nairobi, Kenya
+              Ruprani House, Nairobi, Kenya
             </p>
           </div>
         </div>

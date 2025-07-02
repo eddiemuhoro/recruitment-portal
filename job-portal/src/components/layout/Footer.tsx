@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa';
+import { Link } from "react-router-dom";
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -13,17 +13,22 @@ export default function Footer() {
               Your trusted partner in global talent solutions.
             </p>
             <div className="flex space-x-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+              <a
+                href="https://www.facebook.com/people/Skyways-Global-Services-Ltd/100064217914039/?ref=embed_page#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
                 <FaFacebook className="w-6 h-6" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <FaTwitter className="w-6 h-6" />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+
+              <a
+                href="https://www.linkedin.com/in/skyways-global-service-limited-34a235199/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
                 <FaLinkedin className="w-6 h-6" />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <FaInstagram className="w-6 h-6" />
               </a>
             </div>
           </div>
@@ -33,27 +38,42 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/about"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/jobs" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/jobs"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Jobs
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/services"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Services
                 </Link>
               </li>
               <li>
-                <Link to="/case-studies" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/case-studies"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Case Studies
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/contact"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Contact
                 </Link>
               </li>
@@ -64,10 +84,10 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-400">
-              <li>Email: eddiemuhoro@gmail.com</li>
-              <li>Phone: +254 (0) 705 982 249</li>
-              <li>Address: 123 Business Ave, Suite 100</li>
-              <li>Westlands, Nairobi 00100</li>
+              <li>Email: skywaysglobalhr@gmail.com</li>
+              <li>Phone: +254 723 464 058</li>
+              <li>Address: Moktar Daddah Street, Ruprani Building</li>
+              <li>CBD, Nairobi 00100, Kenya</li>
             </ul>
           </div>
 
@@ -75,7 +95,8 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
             <p className="text-gray-400 mb-4">
-              Subscribe to our newsletter for the latest updates and opportunities.
+              Subscribe to our newsletter for the latest updates and
+              opportunities.
             </p>
             <form className="space-y-4">
               <input
@@ -95,9 +116,12 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Skyways Global. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Skyways Global. All rights
+            reserved.
+          </p>
         </div>
       </div>
     </footer>
   );
-} 
+}

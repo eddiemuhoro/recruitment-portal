@@ -10,9 +10,9 @@ export async function getContactInquiries(
     skip: skip.toString(),
     limit: limit.toString(),
   });
-  
+
   if (isRead !== undefined) {
-    params.append('is_read', isRead.toString());
+    params.append("is_read", isRead.toString());
   }
 
   const response = await fetch(

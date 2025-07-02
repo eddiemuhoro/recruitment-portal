@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import Footer from './Footer';
-import { useState } from 'react';
-import AIChatWidget from '../AIChatWidget';
+import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
+import Footer from "./Footer";
+import { useState } from "react";
+import AIChatWidget from "../AIChatWidget";
 
 interface LayoutProps {
   children: ReactNode;
@@ -22,42 +22,45 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex justify-between h-20">
             <div className="flex items-center space-x-8">
               <Link to="/" className="flex items-center">
-                <span className="text-2xl font-bold text-blue-600">EdMax</span>
+                <img
+                  src="/images/logos/skyways-logo.png"
+                  alt="Logo"
+                  className="h-20 w-auto"
+                />
               </Link>
               <div className="hidden md:flex items-center space-x-6">
-                
-                <Link 
-                  to="/services" 
+                <Link
+                  to="/services"
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
                   Services
                 </Link>
-                <Link 
-                  to="/jobs" 
+                <Link
+                  to="/jobs"
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
                   Jobs
                 </Link>
-                <Link 
-                  to="/partner" 
+                <Link
+                  to="/partner"
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
                   Employers
                 </Link>
-                <Link 
-                  to="/candidates" 
+                <Link
+                  to="/candidates"
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
                   Candidates
                 </Link>
-                <Link 
-                  to="/ai-features" 
+                <Link
+                  to="/ai-features"
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
                   AI Assistant
                 </Link>
-                <Link 
-                  to="/contact" 
+                <Link
+                  to="/contact"
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
                   Contact Us
@@ -107,8 +110,8 @@ export default function Layout({ children }: LayoutProps) {
         </div>
 
         {/* Mobile menu, show/hide based on menu state */}
-        <div 
-          className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden`} 
+        <div
+          className={`${isMobileMenuOpen ? "block" : "hidden"} md:hidden`}
           id="mobile-menu"
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
@@ -179,4 +182,4 @@ export default function Layout({ children }: LayoutProps) {
       <AIChatWidget />
     </div>
   );
-} 
+}
