@@ -175,7 +175,7 @@ Always be professional, clear, and concise in your responses. If you're unsure a
       const match = /language-(\w+)/.exec(className || "");
       return match ? (
         <SyntaxHighlighter
-          style={vscDarkPlus}
+          style={vscDarkPlus as any}
           language={match[1]}
           PreTag="div"
           className="rounded-lg my-4"
