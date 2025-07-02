@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base, cleanup
-from routers import jobs, applications, auth, employer_inquiries, agency_analytics, sessions
+from routers import jobs, applications, auth, employer_inquiries, agency_analytics, sessions, contact_inquiries
 from redis_config import redis_client
 
 @asynccontextmanager
@@ -41,6 +41,7 @@ app.include_router(auth.router, prefix="/api", tags=["auth"])
 app.include_router(employer_inquiries.router, prefix="/api", tags=["employer-inquiries"])
 app.include_router(agency_analytics.router, prefix="/api", tags=["agency-analytics"])
 app.include_router(sessions.router, prefix="/api", tags=["sessions"])
+app.include_router(contact_inquiries.router, prefix="/api", tags=["contact-inquiries"])
 
 @app.get("/")
 def read_root():

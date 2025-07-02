@@ -112,3 +112,27 @@ class EmployerInquiry(EmployerInquiryBase):
 
     class Config:
         from_attributes = True
+
+class ContactInquiryBase(BaseModel):
+    name: str
+    email: EmailStr
+    phone: Optional[str] = None
+    subject: str
+    message: str
+
+class ContactInquiryCreate(ContactInquiryBase):
+    pass
+
+class ContactInquiryUpdate(BaseModel):
+    is_read: Optional[bool] = None
+    response: Optional[str] = None
+
+class ContactInquiry(ContactInquiryBase):
+    id: int
+    created_at: datetime
+    is_read: bool
+    response: Optional[str] = None
+    responded_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True

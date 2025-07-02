@@ -128,3 +128,17 @@ class EmployerInquiry(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     agency = relationship("Agency", back_populates="inquiries")
+
+class ContactInquiry(Base):
+    __tablename__ = "contact_inquiries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    phone = Column(String, nullable=True)  # Phone number for WhatsApp/SMS
+    subject = Column(String, nullable=False)
+    message = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    is_read = Column(Boolean, default=False)
+    response = Column(Text, nullable=True)  # Admin can add response
+    responded_at = Column(DateTime, nullable=True)
