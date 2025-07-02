@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { generateChatResponse } from '../api/openai';
-import type { ChatMessage } from '../api/openai';
-import ReactMarkdown from 'react-markdown';
-import type { Components } from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
-import type { PluggableList } from 'unified';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaRobot, FaUser, FaPaperPlane, FaSpinner } from 'react-icons/fa';
-import { getJobs } from '../api/jobs';
+import React, { useState, useRef, useEffect } from "react";
+import { generateChatResponse } from "../api/openai";
+import type { ChatMessage } from "../api/openai";
+import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import type { PluggableList } from "unified";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaRobot, FaUser, FaPaperPlane, FaSpinner } from "react-icons/fa";
+import { getJobs } from "../api/jobs";
 
 interface Job {
   id: number;
@@ -19,7 +19,7 @@ interface Job {
 }
 
 interface CodeProps {
-  node?: any;
+  node?: React.ReactNode;
   inline?: boolean;
   className?: string;
   children?: React.ReactNode;
@@ -27,7 +27,7 @@ interface CodeProps {
 
 const AIChat: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -35,16 +35,18 @@ const AIChat: React.FC = () => {
   const fetchJobData = async (): Promise<string> => {
     try {
       const jobs = await getJobs();
-      
+
       // Format jobs into a concise string, only including active jobs
       return jobs
-        .filter(job => job.status === 'active')
-        .map(job => 
-          `ID: ${job.id}, Title: ${job.title}, Location: ${job.location}`
-        ).join('\n');
+        .filter((job) => job.status === "active")
+        .map(
+          (job) =>
+            `ID: ${job.id}, Title: ${job.title}, Location: ${job.location}`
+        )
+        .join("\n");
     } catch (error) {
-      console.error('Error fetching jobs:', error);
-      return '';
+      console.error("Error fetching jobs:", error);
+      return "";
     }
   };
 
@@ -53,7 +55,7 @@ const AIChat: React.FC = () => {
     const initializeChat = async () => {
       const jobData = await fetchJobData();
       const systemMessage: ChatMessage = {
-        role: 'system',
+        role: "system",
         content: `You are a helpful assistant for Skyways Global, a leading recruitment agency. Your role is to provide accurate and helpful information about:
 
 1. Company Culture:
@@ -89,7 +91,7 @@ When recommending jobs:
 - Visa and work permit assistance
 - Relocation support
 
-Always be professional, clear, and concise in your responses. If you're unsure about specific details, acknowledge the limitation and suggest contacting our support team at eddiemuhoro@gmail.com or calling +254 (0) 705 982 249.`
+Always be professional, clear, and concise in your responses. If you're unsure about specific details, acknowledge the limitation and suggest contacting our support team at eddiemuhoro@gmail.com or calling +254 (0) 705 982 249.`,
       };
       setMessages([systemMessage]);
     };
@@ -98,7 +100,7 @@ Always be professional, clear, and concise in your responses. If you're unsure a
   }, []);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -110,42 +112,55 @@ Always be professional, clear, and concise in your responses. If you're unsure a
     if (!input.trim()) return;
 
     const userMessage: ChatMessage = {
-      role: 'user',
-      content: input
+      role: "user",
+      content: input,
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
     setIsLoading(true);
 
     try {
       const response = await generateChatResponse([...messages, userMessage]);
       const assistantMessage: ChatMessage = {
-        role: 'assistant',
-        content: response || 'Sorry, I could not process your request.'
+        role: "assistant",
+        content: response || "Sorry, I could not process your request.",
       };
-      setMessages(prev => [...prev, assistantMessage]);
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      console.error('Error in chat:', error);
+      console.error("Error in chat:", error);
       const errorMessage: ChatMessage = {
-        role: 'assistant',
-        content: 'Sorry, there was an error processing your request. Please try again.'
+        role: "assistant",
+        content:
+          "Sorry, there was an error processing your request. Please try again.",
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
 
   const markdownComponents: Components = {
-    h1: ({ children }) => <h1 className="text-2xl font-bold mb-4 text-blue-600">{children}</h1>,
-    h2: ({ children }) => <h2 className="text-xl font-bold mb-3 text-blue-500">{children}</h2>,
-    h3: ({ children }) => <h3 className="text-lg font-bold mb-2 text-blue-400">{children}</h3>,
+    h1: ({ children }) => (
+      <h1 className="text-2xl font-bold mb-4 text-blue-600">{children}</h1>
+    ),
+    h2: ({ children }) => (
+      <h2 className="text-xl font-bold mb-3 text-blue-500">{children}</h2>
+    ),
+    h3: ({ children }) => (
+      <h3 className="text-lg font-bold mb-2 text-blue-400">{children}</h3>
+    ),
     p: ({ children }) => <p className="mb-3 leading-relaxed">{children}</p>,
-    ul: ({ children }) => <ul className="list-disc pl-6 mb-4 space-y-1">{children}</ul>,
-    ol: ({ children }) => <ol className="list-decimal pl-6 mb-4 space-y-1">{children}</ol>,
+    ul: ({ children }) => (
+      <ul className="list-disc pl-6 mb-4 space-y-1">{children}</ul>
+    ),
+    ol: ({ children }) => (
+      <ol className="list-decimal pl-6 mb-4 space-y-1">{children}</ol>
+    ),
     li: ({ children }) => <li className="mb-1">{children}</li>,
-    strong: ({ children }) => <strong className="font-bold text-gray-900">{children}</strong>,
+    strong: ({ children }) => (
+      <strong className="font-bold text-gray-900">{children}</strong>
+    ),
     em: ({ children }) => <em className="italic text-gray-700">{children}</em>,
     blockquote: ({ children }) => (
       <blockquote className="border-l-4 border-blue-500 pl-4 my-4 italic text-gray-700">
@@ -153,19 +168,22 @@ Always be professional, clear, and concise in your responses. If you're unsure a
       </blockquote>
     ),
     code: ({ node, inline, className, children, ...props }: CodeProps) => {
-      const match = /language-(\w+)/.exec(className || '');
+      const match = /language-(\w+)/.exec(className || "");
       return !inline && match ? (
         <SyntaxHighlighter
-          style={vscDarkPlus as any}
+          style={vscDarkPlus}
           language={match[1]}
           PreTag="div"
           className="rounded-lg my-4"
           {...props}
         >
-          {String(children).replace(/\n$/, '')}
+          {String(children).replace(/\n$/, "")}
         </SyntaxHighlighter>
       ) : (
-        <code className="bg-gray-100 rounded px-1.5 py-0.5 font-mono text-sm" {...props}>
+        <code
+          className="bg-gray-100 rounded px-1.5 py-0.5 font-mono text-sm"
+          {...props}
+        >
           {children}
         </code>
       );
@@ -182,7 +200,9 @@ Always be professional, clear, and concise in your responses. If you're unsure a
     ),
     table: ({ children }) => (
       <div className="overflow-x-auto my-4">
-        <table className="min-w-full divide-y divide-gray-200">{children}</table>
+        <table className="min-w-full divide-y divide-gray-200">
+          {children}
+        </table>
       </div>
     ),
     th: ({ children }) => (
@@ -191,7 +211,9 @@ Always be professional, clear, and concise in your responses. If you're unsure a
       </th>
     ),
     td: ({ children }) => (
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{children}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        {children}
+      </td>
     ),
   };
 
@@ -203,52 +225,56 @@ Always be professional, clear, and concise in your responses. If you're unsure a
           AI Assistant
         </h2>
       </div>
-      
+
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         <AnimatePresence>
-          {messages.filter(msg => msg.role !== 'system').map((message, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className={`flex ${
-                message.role === 'user' ? 'justify-end' : 'justify-start'
-              }`}
-            >
-              <div
-                className={`max-w-[80%] rounded-lg p-4 ${
-                  message.role === 'user'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-50 text-gray-800 shadow-sm'
+          {messages
+            .filter((msg) => msg.role !== "system")
+            .map((message, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  {message.role === 'user' ? (
-                    <FaUser className="text-sm" />
-                  ) : (
-                    <FaRobot className="text-sm" />
-                  )}
-                  <span className="text-xs font-medium">
-                    {message.role === 'user' ? 'You' : 'AI Assistant'}
-                  </span>
-                </div>
-                {message.role === 'assistant' ? (
-                  <div className="prose prose-sm max-w-none">
-                    <ReactMarkdown
-                      components={markdownComponents}
-                      remarkPlugins={[remarkGfm, remarkBreaks] as PluggableList}
-                    >
-                      {message.content}
-                    </ReactMarkdown>
+                <div
+                  className={`max-w-[80%] rounded-lg p-4 ${
+                    message.role === "user"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-50 text-gray-800 shadow-sm"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    {message.role === "user" ? (
+                      <FaUser className="text-sm" />
+                    ) : (
+                      <FaRobot className="text-sm" />
+                    )}
+                    <span className="text-xs font-medium">
+                      {message.role === "user" ? "You" : "AI Assistant"}
+                    </span>
                   </div>
-                ) : (
-                  message.content
-                )}
-              </div>
-            </motion.div>
-          ))}
+                  {message.role === "assistant" ? (
+                    <div className="prose prose-sm max-w-none">
+                      <ReactMarkdown
+                        components={markdownComponents}
+                        remarkPlugins={
+                          [remarkGfm, remarkBreaks] as PluggableList
+                        }
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    </div>
+                  ) : (
+                    message.content
+                  )}
+                </div>
+              </motion.div>
+            ))}
         </AnimatePresence>
         {isLoading && (
           <motion.div
@@ -291,4 +317,4 @@ Always be professional, clear, and concise in your responses. If you're unsure a
   );
 };
 
-export default AIChat; 
+export default AIChat;
