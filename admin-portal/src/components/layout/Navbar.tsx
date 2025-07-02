@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const location = useLocation();
@@ -17,9 +17,9 @@ export default function Navbar() {
               <Link
                 to="/dashboard"
                 className={`${
-                  isActive('/dashboard')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  isActive("/dashboard")
+                    ? "border-blue-500 text-gray-900"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
                 Dashboard
@@ -27,9 +27,9 @@ export default function Navbar() {
               <Link
                 to="/jobs"
                 className={`${
-                  isActive('/jobs')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  isActive("/jobs")
+                    ? "border-blue-500 text-gray-900"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
                 Jobs
@@ -37,9 +37,9 @@ export default function Navbar() {
               <Link
                 to="/applications"
                 className={`${
-                  isActive('/applications')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  isActive("/applications")
+                    ? "border-blue-500 text-gray-900"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
                 Applications
@@ -47,12 +47,22 @@ export default function Navbar() {
               <Link
                 to="/inquiries"
                 className={`${
-                  isActive('/inquiries')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  isActive("/inquiries")
+                    ? "border-blue-500 text-gray-900"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
                 Employer Inquiries
+              </Link>
+              <Link
+                to="/contact-inquiries"
+                className={`${
+                  isActive("/contact-inquiries")
+                    ? "border-blue-500 text-gray-900"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+              >
+                Contact Inquiries
               </Link>
             </div>
           </div>
@@ -60,4 +70,4 @@ export default function Navbar() {
       </div>
     </nav>
   );
-} 
+}

@@ -75,3 +75,21 @@ export interface EmployerInquiry {
   is_urgent: boolean;
   created_at: string;
 }
+
+export interface ContactInquiry {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  created_at: string;
+  is_read: boolean;
+  response: string | null;
+  responded_at: string | null;
+}
+
+export interface ContactInquiryUpdate {
+  is_read?: boolean;
+  response?: string;
+}

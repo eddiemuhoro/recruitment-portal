@@ -1,9 +1,15 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/layout/Navbar';
-import JobsPage from './pages/JobsPage';
-import ApplicationsPage from './pages/ApplicationsPage';
-import InquiriesPage from './pages/InquiriesPage';
-import { DashboardPage } from './pages/DashboardPage';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Navbar from "./components/layout/Navbar";
+import JobsPage from "./pages/JobsPage";
+import ApplicationsPage from "./pages/ApplicationsPage";
+import InquiriesPage from "./pages/InquiriesPage";
+import ContactInquiriesPage from "./pages/ContactInquiriesPage";
+import { DashboardPage } from "./pages/DashboardPage";
 
 function App() {
   return (
@@ -17,6 +23,10 @@ function App() {
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/applications" element={<ApplicationsPage />} />
             <Route path="/inquiries" element={<InquiriesPage />} />
+            <Route
+              path="/contact-inquiries"
+              element={<ContactInquiriesPage />}
+            />
           </Routes>
         </main>
       </div>

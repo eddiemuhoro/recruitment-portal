@@ -1,4 +1,4 @@
-import type { EmployerInquiry } from '../../types';
+import type { EmployerInquiry } from "../../types";
 
 interface EmployerInquiryListProps {
   inquiries: EmployerInquiry[];
@@ -7,10 +7,9 @@ interface EmployerInquiryListProps {
 
 export default function EmployerInquiryList({
   inquiries,
-  onStatusChange,
 }: EmployerInquiryListProps) {
   const getUrgencyColor = (isUrgent: boolean) => {
-    return isUrgent ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800';
+    return isUrgent ? "bg-red-100 text-red-800" : "bg-gray-100 text-gray-800";
   };
 
   return (
@@ -26,7 +25,6 @@ export default function EmployerInquiryList({
                 <h3 className="text-lg font-medium text-gray-900">
                   {inquiry.employer_name}
                 </h3>
-              
               </div>
               <div className="flex items-center space-x-4">
                 <span
@@ -34,7 +32,7 @@ export default function EmployerInquiryList({
                     inquiry.is_urgent
                   )}`}
                 >
-                  {inquiry.is_urgent ? 'Urgent' : 'Normal'}
+                  {inquiry.is_urgent ? "Urgent" : "Normal"}
                 </span>
               </div>
             </div>
@@ -51,7 +49,7 @@ export default function EmployerInquiryList({
                   Email: {inquiry.contact_email}
                 </p>
                 <p className="mt-1 text-sm text-gray-500">
-                  Phone: {inquiry.phone_number || 'Not provided'}
+                  Phone: {inquiry.phone_number || "Not provided"}
                 </p>
                 <p className="mt-1 text-sm text-gray-500">
                   Received: {new Date(inquiry.created_at).toLocaleDateString()}
@@ -59,14 +57,14 @@ export default function EmployerInquiryList({
               </div>
               <div>
                 <h4 className="text-sm font-medium text-gray-900">Message</h4>
-                <p className="mt-1 text-sm text-gray-500 whitespace-pre-wrap">{inquiry.message}</p>
+                <p className="mt-1 text-sm text-gray-500 whitespace-pre-wrap">
+                  {inquiry.message}
+                </p>
               </div>
             </div>
-
-            
           </div>
         </div>
       ))}
     </div>
   );
-} 
+}
