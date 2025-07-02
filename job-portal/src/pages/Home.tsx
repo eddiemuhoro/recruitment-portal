@@ -1,6 +1,19 @@
-import { Link } from 'react-router-dom';
-import { FaGlobe, FaPassport, FaGraduationCap, FaUsers, FaSearch, FaUserCheck, FaHandshake, FaHeadset } from 'react-icons/fa';
-import { MdOutlineWorkOutline, MdOutlineSecurity, MdOutlinePayments } from 'react-icons/md';
+import { Link } from "react-router-dom";
+import {
+  FaGlobe,
+  FaPassport,
+  FaGraduationCap,
+  FaUsers,
+  FaSearch,
+  FaUserCheck,
+  FaHandshake,
+  FaHeadset,
+} from "react-icons/fa";
+import {
+  MdOutlineWorkOutline,
+  MdOutlineSecurity,
+  MdOutlinePayments,
+} from "react-icons/md";
 
 export default function Home() {
   return (
@@ -9,7 +22,7 @@ export default function Home() {
       <div className="relative h-[90vh] flex items-center">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="/images/hero/home.avif"
             alt="Global workforce"
             className="w-full h-full object-cover"
           />
@@ -21,8 +34,8 @@ export default function Home() {
               Your Trusted Partner for Global Talent Solutions
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-blue-100">
-              Connecting exceptional talent with leading organizations worldwide. 
-              Empowering careers, building futures.
+              Connecting exceptional talent with leading organizations
+              worldwide. Empowering careers, building futures.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -51,8 +64,18 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-sm">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold mb-2">Verified Employers</h3>
@@ -63,8 +86,18 @@ export default function Home() {
 
             <div className="bg-white p-8 rounded-xl shadow-sm">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold mb-2">Secure Platform</h3>
@@ -75,13 +108,24 @@ export default function Home() {
 
             <div className="bg-white p-8 rounded-xl shadow-sm">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold mb-2">Quick Apply</h3>
               <p className="text-gray-600">
-                Apply to multiple jobs with just a few clicks using your profile.
+                Apply to multiple jobs with just a few clicks using your
+                profile.
               </p>
             </div>
           </div>
@@ -95,7 +139,8 @@ export default function Home() {
             Ready to Start Your Career Journey?
           </h2>
           <p className="text-xl mb-8">
-            Join thousands of professionals who found their dream jobs through our platform.
+            Join thousands of professionals who found their dream jobs through
+            our platform.
           </p>
           <div className="space-x-4">
             <Link
@@ -118,10 +163,13 @@ export default function Home() {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Who We Are</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              Who We Are
+            </h2>
             <p className="text-xl text-gray-600">
-              Skyways Global is your premier partner in international recruitment, 
-              dedicated to connecting exceptional talent with leading organizations worldwide.
+              Skyways Global is your premier partner in international
+              recruitment, dedicated to connecting exceptional talent with
+              leading organizations worldwide.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -129,9 +177,12 @@ export default function Home() {
               <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
                 <FaGlobe className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">International Recruitment</h3>
+              <h3 className="text-xl font-semibold mb-3">
+                International Recruitment
+              </h3>
               <p className="text-gray-600">
-                Global talent sourcing and placement across multiple industries and regions.
+                Global talent sourcing and placement across multiple industries
+                and regions.
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
@@ -147,7 +198,9 @@ export default function Home() {
               <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
                 <FaGraduationCap className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Pre-departure Training</h3>
+              <h3 className="text-xl font-semibold mb-3">
+                Pre-departure Training
+              </h3>
               <p className="text-gray-600">
                 Cultural orientation and professional development programs.
               </p>
@@ -168,7 +221,9 @@ export default function Home() {
       {/* Our Approach Section */}
       <section className="py-20">
         <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Our Approach</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+            Our Approach
+          </h2>
           <div className="grid md:grid-cols-5 gap-8">
             <div className="text-center">
               <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -212,7 +267,9 @@ export default function Home() {
       {/* Case Studies Section */}
       <div className="py-16">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">Success Stories</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Success Stories
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Case Study 1 */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -222,9 +279,13 @@ export default function Home() {
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Tech Talent Expansion in Singapore</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Tech Talent Expansion in Singapore
+                </h3>
                 <p className="text-gray-600 mb-4">
-                  Helped a leading tech company scale their engineering team from 50 to 200+ professionals within 12 months, focusing on specialized roles in AI and cloud computing.
+                  Helped a leading tech company scale their engineering team
+                  from 50 to 200+ professionals within 12 months, focusing on
+                  specialized roles in AI and cloud computing.
                 </p>
                 <div className="flex items-center text-sm text-gray-500">
                   <span className="font-medium text-blue-600">Client:</span>
@@ -246,9 +307,13 @@ export default function Home() {
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Healthcare Staffing in UAE</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Healthcare Staffing in UAE
+                </h3>
                 <p className="text-gray-600 mb-4">
-                  Successfully recruited 150+ healthcare professionals for a major hospital network, including specialized doctors, nurses, and medical technicians across various departments.
+                  Successfully recruited 150+ healthcare professionals for a
+                  major hospital network, including specialized doctors, nurses,
+                  and medical technicians across various departments.
                 </p>
                 <div className="flex items-center text-sm text-gray-500">
                   <span className="font-medium text-blue-600">Client:</span>
@@ -270,9 +335,13 @@ export default function Home() {
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Construction Workforce in Qatar</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Construction Workforce in Qatar
+                </h3>
                 <p className="text-gray-600 mb-4">
-                  Managed the recruitment of 500+ skilled construction workers for a major infrastructure project, ensuring compliance with local regulations and maintaining high safety standards.
+                  Managed the recruitment of 500+ skilled construction workers
+                  for a major infrastructure project, ensuring compliance with
+                  local regulations and maintaining high safety standards.
                 </p>
                 <div className="flex items-center text-sm text-gray-500">
                   <span className="font-medium text-blue-600">Client:</span>
@@ -292,7 +361,9 @@ export default function Home() {
       {/* Latest Updates Section */}
       <section className="py-20">
         <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Latest Updates</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+            Latest Updates
+          </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-sm">
               <div className="flex items-center mb-4">
@@ -305,7 +376,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-gray-600">
-                Expanding our presence in Southeast Asia with a new office in Singapore.
+                Expanding our presence in Southeast Asia with a new office in
+                Singapore.
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-sm">
@@ -314,12 +386,15 @@ export default function Home() {
                   <FaUsers className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold">Industry Partnership</h3>
+                  <h3 className="text-xl font-semibold">
+                    Industry Partnership
+                  </h3>
                   <p className="text-gray-500">March 10, 2024</p>
                 </div>
               </div>
               <p className="text-gray-600">
-                Strategic partnership with leading tech companies for specialized recruitment.
+                Strategic partnership with leading tech companies for
+                specialized recruitment.
               </p>
             </div>
           </div>
@@ -385,8 +460,9 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-semibold mb-4">Best in Market</h3>
               <p className="text-gray-600 mb-4">
-                Our commitment to excellence in global talent acquisition is unmatched. 
-                We maintain the highest standards in candidate quality and client satisfaction.
+                Our commitment to excellence in global talent acquisition is
+                unmatched. We maintain the highest standards in candidate
+                quality and client satisfaction.
               </p>
               <ul className="space-y-2">
                 <li className="flex items-center text-gray-600">
@@ -407,10 +483,12 @@ export default function Home() {
               <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
                 <MdOutlinePayments className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-2xl font-semibold mb-4">Innovative Solutions</h3>
+              <h3 className="text-2xl font-semibold mb-4">
+                Innovative Solutions
+              </h3>
               <p className="text-gray-600 mb-4">
-                Leveraging cutting-edge technology and global networks to provide 
-                customized workforce solutions for every client.
+                Leveraging cutting-edge technology and global networks to
+                provide customized workforce solutions for every client.
               </p>
               <ul className="space-y-2">
                 <li className="flex items-center text-gray-600">
@@ -434,10 +512,15 @@ export default function Home() {
       {/* Testimonials Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Client Testimonials</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+            Client Testimonials
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[1, 2, 3].map((testimonial) => (
-              <div key={testimonial} className="bg-white p-8 rounded-xl shadow-sm">
+              <div
+                key={testimonial}
+                className="bg-white p-8 rounded-xl shadow-sm"
+              >
                 <div className="flex items-center mb-6">
                   <div className="w-16 h-16 bg-gray-200 rounded-full mr-4"></div>
                   <div>
@@ -446,16 +529,15 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="text-gray-600">
-                  "Skyways Global has transformed our recruitment process. Their 
-                  international expertise and professional approach have been invaluable."
+                  "Skyways Global has transformed our recruitment process. Their
+                  international expertise and professional approach have been
+                  invaluable."
                 </p>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-    
     </div>
   );
-} 
+}

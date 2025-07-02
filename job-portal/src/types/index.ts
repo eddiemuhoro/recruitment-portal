@@ -25,11 +25,11 @@ export type Job = {
   title: string;
   company: string;
   location: string;
-  type: 'Full-time' | 'Part-time' | 'Contract' | 'Remote';
+  type: "Full-time" | "Part-time" | "Contract" | "Remote";
   description: string;
   requirements: string[];
   salary: string;
-  status: 'active' | 'closed' | 'draft';
+  status: "active" | "closed" | "draft";
   posted_date: string;
   passport_required?: boolean;
   required_documents?: DocumentType[];
@@ -40,7 +40,7 @@ export type JobCreate = {
   title: string;
   company: string;
   location: string;
-  type: 'Full-time' | 'Part-time' | 'Contract' | 'Remote';
+  type: "Full-time" | "Part-time" | "Contract" | "Remote";
   description: string;
   requirements: string[];
   salary: string;
@@ -57,7 +57,7 @@ export type JobApplication = {
   phone: string;
   cover_letter?: string | null;
   passport_number?: string | null;
-  status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
+  status: "pending" | "reviewed" | "accepted" | "rejected";
   applied_date: string;
   documents: ApplicationDocument[];
 };
@@ -76,5 +76,5 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'employer' | 'user';
-}; 
+  role: "admin" | "employer" | "user";
+};

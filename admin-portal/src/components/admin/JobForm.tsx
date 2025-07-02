@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import type { Job, JobCreate, DocumentType } from '../../types';
+import { useState, useEffect } from "react";
+import type { Job, JobCreate, DocumentType } from "../../types";
 
 interface JobFormProps {
   job?: Job;
@@ -9,17 +9,17 @@ interface JobFormProps {
 
 export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
   const [formData, setFormData] = useState<JobCreate>({
-    title: '',
-    company: '',
-    location: '',
-    type: '',
-    description: '',
-    requirements: [''],
-    salary: '',
-    status: 'active',
+    title: "",
+    company: "",
+    location: "",
+    type: "",
+    description: "",
+    requirements: [""],
+    salary: "",
+    status: "active",
     employer_id: 1, // Default employer_id for admin
     passport_required: false,
-    required_documents: ['cv']
+    required_documents: ["cv"],
   });
 
   useEffect(() => {
@@ -31,7 +31,9 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
   }, [job]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -49,7 +51,7 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
   const addRequirement = () => {
     setFormData((prev) => ({
       ...prev,
-      requirements: [...prev.requirements, ''],
+      requirements: [...prev.requirements, ""],
     }));
   };
 
@@ -60,35 +62,53 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
     }));
   };
 
-  const handlePassportRequiredChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePassportRequiredChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setFormData((prev) => ({ ...prev, passport_required: e.target.checked }));
   };
 
-  const handleRequiredDocumentChange = (document: DocumentType, checked: boolean) => {
+  const handleRequiredDocumentChange = (
+    document: DocumentType,
+    checked: boolean
+  ) => {
     setFormData((prev) => ({
       ...prev,
       required_documents: checked
         ? [...(prev.required_documents || []), document]
-        : (prev.required_documents || []).filter(doc => doc !== document)
+        : (prev.required_documents || []).filter((doc) => doc !== document),
     }));
   };
 
-  const documentTypes: DocumentType[] = ['cv', 'passport', 'birth_certificate', 'kcse_certificate', 'kcpe_certificate', 'certificate_of_good_conduct', 'academic_transcripts', 'professional_certificate', 'work_permit', 'police_clearance', 'medical_certificate', 'other'];
+  const documentTypes: DocumentType[] = [
+    "cv",
+    "passport",
+    "birth_certificate",
+    "kcse_certificate",
+    "kcpe_certificate",
+    "certificate_of_good_conduct",
+    "academic_transcripts",
+    "professional_certificate",
+    "work_permit",
+    "police_clearance",
+    "medical_certificate",
+    "other",
+  ];
 
   const getDocumentTypeLabel = (docType: DocumentType): string => {
     const labels: Record<DocumentType, string> = {
-      cv: 'CV/Resume',
-      passport: 'Passport',
-      birth_certificate: 'Birth Certificate',
-      kcse_certificate: 'KCSE Certificate',
-      kcpe_certificate: 'KCPE Certificate',
-      certificate_of_good_conduct: 'Certificate of Good Conduct',
-      academic_transcripts: 'Academic Transcripts',
-      professional_certificate: 'Professional Certificate',
-      work_permit: 'Work Permit',
-      police_clearance: 'Police Clearance',
-      medical_certificate: 'Medical Certificate',
-      other: 'Other Documents'
+      cv: "CV/Resume",
+      passport: "Passport",
+      birth_certificate: "Birth Certificate",
+      kcse_certificate: "KCSE Certificate",
+      kcpe_certificate: "KCPE Certificate",
+      certificate_of_good_conduct: "Certificate of Good Conduct",
+      academic_transcripts: "Academic Transcripts",
+      professional_certificate: "Professional Certificate",
+      work_permit: "Work Permit",
+      police_clearance: "Police Clearance",
+      medical_certificate: "Medical Certificate",
+      other: "Other Documents",
     };
     return labels[docType] || docType;
   };
@@ -98,17 +118,23 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
     // Ensure employer_id is set to 1 before submission
     const jobData = {
       ...formData,
-      employer_id: 1
+      employer_id: 1,
     };
     await onSubmit(jobData);
   };
 
-  const inputClasses = "mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200 px-4 py-2.5";
-  const selectClasses = "mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200 px-4 py-2.5";
-  const textareaClasses = "mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200 px-4 py-2.5";
+  const inputClasses =
+    "mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200 px-4 py-2.5";
+  const selectClasses =
+    "mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200 px-4 py-2.5";
+  const textareaClasses =
+    "mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200 px-4 py-2.5";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+    >
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div>
           <label
@@ -294,7 +320,10 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
             onChange={handlePassportRequiredChange}
             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
           />
-          <label htmlFor="passport_required" className="ml-2 block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="passport_required"
+            className="ml-2 block text-sm font-medium text-gray-700"
+          >
             Passport Required
           </label>
         </div>
@@ -311,11 +340,18 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
                 id={`doc_${docType}`}
                 name="required_documents"
                 type="checkbox"
-                checked={formData.required_documents?.includes(docType) || false}
-                onChange={(e) => handleRequiredDocumentChange(docType, e.target.checked)}
+                checked={
+                  formData.required_documents?.includes(docType) || false
+                }
+                onChange={(e) =>
+                  handleRequiredDocumentChange(docType, e.target.checked)
+                }
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <label htmlFor={`doc_${docType}`} className="ml-2 block text-sm text-gray-700">
+              <label
+                htmlFor={`doc_${docType}`}
+                className="ml-2 block text-sm text-gray-700"
+              >
                 {getDocumentTypeLabel(docType)}
               </label>
             </div>
@@ -335,9 +371,9 @@ export default function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
           type="submit"
           className="inline-flex items-center px-4 py-2 border-2 border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
         >
-          {job ? 'Update Job' : 'Create Job'}
+          {job ? "Update Job" : "Create Job"}
         </button>
       </div>
     </form>
   );
-} 
+}

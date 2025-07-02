@@ -1,17 +1,17 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import ProtectedRoute from './components/auth/ProtectedRoute';
-import Login from './pages/Login';
-import Layout from './components/layout/Layout';
-import Services from './pages/Services';
-import JobList from './components/jobs/JobList';
-import Contact from './pages/Contact';
-import Partner from './pages/Partner';
-import JobApplicationFormWrapper from './components/application/JobApplicationFormWrapper.tsx';
-import Home from './pages/Home.tsx';
-import Candidates from './pages/Candidates';
-import AIFeatures from './pages/AIFeatures';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import Login from "./pages/Login";
+import Layout from "./components/layout/Layout";
+import Services from "./pages/Services";
+import JobList from "./components/jobs/JobList";
+import Contact from "./pages/Contact";
+import Partner from "./pages/Partner";
+import JobApplicationFormWrapper from "./components/application/JobApplicationFormWrapper.tsx";
+import Home from "./pages/Home.tsx";
+import Candidates from "./pages/Candidates";
+import AIFeatures from "./pages/AIFeatures";
 
 // Create a client
 const queryClient = new QueryClient({

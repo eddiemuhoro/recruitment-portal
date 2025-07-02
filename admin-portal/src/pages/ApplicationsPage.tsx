@@ -1,42 +1,47 @@
-import { useState, useEffect } from 'react';
-import type { Job, JobApplication } from '../types';
-import { getApplications, updateApplicationStatus } from '../api/applications';
-import { getJobs } from '../api/jobs';
-import ApplicationFilters from '../components/admin/ApplicationFilters';
-import Modal from '../components/common/Modal';
+import { useState, useEffect } from "react";
+import type { Job, JobApplication } from "../types";
+import { getApplications, updateApplicationStatus } from "../api/applications";
+import { getJobs } from "../api/jobs";
+import ApplicationFilters from "../components/admin/ApplicationFilters";
+import Modal from "../components/common/Modal";
 
-type ApplicationStatus = JobApplication['status'];
+type ApplicationStatus = JobApplication["status"];
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [updatingApplications, setUpdatingApplications] = useState<Set<string>>(new Set());
-  const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | 'all'>('pending');
+  const [updatingApplications, setUpdatingApplications] = useState<Set<string>>(
+    new Set()
+  );
+  const [selectedApplication, setSelectedApplication] =
+    useState<JobApplication | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<
+    ApplicationStatus | "all"
+  >("pending");
   const [filters, setFilters] = useState({
     aiScoreRange: { min: 0, max: 100 },
-    dateRange: { start: '', end: '' },
-    selectedJob: '',
-    skills: '',
-    passportStatus: 'all' as 'all' | 'has' | 'missing'
+    dateRange: { start: "", end: "" },
+    selectedJob: "",
+    skills: "",
+    passportStatus: "all" as "all" | "has" | "missing",
   });
 
   const getDocumentTypeLabel = (docType: string): string => {
     const labels: Record<string, string> = {
-      cv: 'CV/Resume',
-      passport: 'Passport',
-      birth_certificate: 'Birth Certificate',
-      kcse_certificate: 'KCSE Certificate',
-      kcpe_certificate: 'KCPE Certificate',
-      certificate_of_good_conduct: 'Certificate of Good Conduct',
-      academic_transcripts: 'Academic Transcripts',
-      professional_certificate: 'Professional Certificate',
-      work_permit: 'Work Permit',
-      police_clearance: 'Police Clearance',
-      medical_certificate: 'Medical Certificate',
-      other: 'Other Documents'
+      cv: "CV/Resume",
+      passport: "Passport",
+      birth_certificate: "Birth Certificate",
+      kcse_certificate: "KCSE Certificate",
+      kcpe_certificate: "KCPE Certificate",
+      certificate_of_good_conduct: "Certificate of Good Conduct",
+      academic_transcripts: "Academic Transcripts",
+      professional_certificate: "Professional Certificate",
+      work_permit: "Work Permit",
+      police_clearance: "Police Clearance",
+      medical_certificate: "Medical Certificate",
+      other: "Other Documents",
     };
     return labels[docType] || docType;
   };
@@ -44,7 +49,7 @@ export default function ApplicationsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        console.log('Fetching applications and jobs...');
+        console.log("Fetching applications and jobs...");
         setIsLoading(true);
         setError(null);
         const [applicationsData, jobsData] = await Promise.all([
@@ -52,17 +57,19 @@ export default function ApplicationsPage() {
           getJobs(),
         ]);
         // Add random AI scores to applications
-        const applicationsWithScores = applicationsData.map(app => ({
+        const applicationsWithScores = applicationsData.map((app) => ({
           ...app,
-          ai_score: Number(Math.random().toFixed(2)) * 100
+          ai_score: Number(Math.random().toFixed(2)) * 100,
         }));
-        console.log('Applications fetched:', applicationsWithScores);
-        console.log('Jobs fetched:', jobsData);
+        console.log("Applications fetched:", applicationsWithScores);
+        console.log("Jobs fetched:", jobsData);
         setApplications(applicationsWithScores);
         setJobs(jobsData);
       } catch (error) {
-        console.error('Error loading data:', error);
-        setError(error instanceof Error ? error.message : 'Failed to load data');
+        console.error("Error loading data:", error);
+        setError(
+          error instanceof Error ? error.message : "Failed to load data"
+        );
       } finally {
         setIsLoading(false);
       }
@@ -74,17 +81,17 @@ export default function ApplicationsPage() {
     id: string,
     status: ApplicationStatus
   ) => {
-    setUpdatingApplications(prev => new Set([...prev, id]));
+    setUpdatingApplications((prev) => new Set([...prev, id]));
     try {
       await updateApplicationStatus(id, status);
       setApplications(
         applications.map((a) => (a.id === id ? { ...a, status } : a))
       );
     } catch (error) {
-      console.error('Error updating application status:', error);
-      setError('Failed to update application status. Please try again.');
+      console.error("Error updating application status:", error);
+      setError("Failed to update application status. Please try again.");
     } finally {
-      setUpdatingApplications(prev => {
+      setUpdatingApplications((prev) => {
         const next = new Set(prev);
         next.delete(id);
         return next;
@@ -93,7 +100,8 @@ export default function ApplicationsPage() {
   };
 
   const filteredApplications = applications.filter((application) => {
-    const matchesStatus = selectedStatus === 'all' || application.status === selectedStatus;
+    const matchesStatus =
+      selectedStatus === "all" || application.status === selectedStatus;
     const matchesJob =
       !filters.selectedJob || application.job_id === filters.selectedJob;
     const matchesScore =
@@ -106,36 +114,44 @@ export default function ApplicationsPage() {
       );
     const matchesDate =
       (!filters.dateRange.start ||
-        new Date(application.applied_date) >= new Date(filters.dateRange.start)) &&
+        new Date(application.applied_date) >=
+          new Date(filters.dateRange.start)) &&
       (!filters.dateRange.end ||
         new Date(application.applied_date) <= new Date(filters.dateRange.end));
-    const matchesPassport = 
-      filters.passportStatus === 'all' || 
-      (filters.passportStatus === 'has' && application.passport_number) ||
-      (filters.passportStatus === 'missing' && !application.passport_number);
+    const matchesPassport =
+      filters.passportStatus === "all" ||
+      (filters.passportStatus === "has" && application.passport_number) ||
+      (filters.passportStatus === "missing" && !application.passport_number);
 
-    return matchesStatus && matchesJob && matchesScore && matchesSkills && matchesDate && matchesPassport;
+    return (
+      matchesStatus &&
+      matchesJob &&
+      matchesScore &&
+      matchesSkills &&
+      matchesDate &&
+      matchesPassport
+    );
   });
 
-  const getStatusCount = (status: ApplicationStatus | 'all') => {
-    if (status === 'all') {
+  const getStatusCount = (status: ApplicationStatus | "all") => {
+    if (status === "all") {
       return applications.length;
     }
-    return applications.filter(app => app.status === status).length;
+    return applications.filter((app) => app.status === status).length;
   };
 
-  const statusTabs: { value: ApplicationStatus | 'all'; label: string }[] = [
-    { value: 'all', label: 'All' },
-    { value: 'pending', label: 'Pending' },
-    { value: 'reviewed', label: 'Reviewed' },
-    { value: 'accepted', label: 'Accepted' },
-    { value: 'rejected', label: 'Rejected' },
+  const statusTabs: { value: ApplicationStatus | "all"; label: string }[] = [
+    { value: "all", label: "All" },
+    { value: "pending", label: "Pending" },
+    { value: "reviewed", label: "Reviewed" },
+    { value: "accepted", label: "Accepted" },
+    { value: "rejected", label: "Rejected" },
   ];
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Manage Applications</h2>
-      
+
       {isLoading && (
         <div className="text-center py-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -147,8 +163,16 @@ export default function ApplicationsPage() {
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              <svg
+                className="h-5 w-5 text-red-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
               </svg>
             </div>
             <div className="ml-3">
@@ -166,18 +190,18 @@ export default function ApplicationsPage() {
               {statusTabs.map((tab) => {
                 const isSelected = selectedStatus === tab.value;
                 const count = getStatusCount(tab.value);
-                const getStatusColor = (status: ApplicationStatus | 'all') => {
+                const getStatusColor = (status: ApplicationStatus | "all") => {
                   switch (status) {
-                    case 'pending':
-                      return 'yellow';
-                    case 'reviewed':
-                      return 'blue';
-                    case 'accepted':
-                      return 'green';
-                    case 'rejected':
-                      return 'red';
+                    case "pending":
+                      return "yellow";
+                    case "reviewed":
+                      return "blue";
+                    case "accepted":
+                      return "green";
+                    case "rejected":
+                      return "red";
                     default:
-                      return 'gray';
+                      return "gray";
                   }
                 };
                 const color = getStatusColor(tab.value);
@@ -189,27 +213,33 @@ export default function ApplicationsPage() {
                     className={`
                       group relative min-w-[100px] py-4 px-3 text-center
                       transition-all duration-200 ease-in-out
-                      ${isSelected 
-                        ? `text-${color}-600 border-b-2 border-${color}-500 font-semibold` 
-                        : `text-gray-500 hover:text-${color}-600 border-b-2 border-transparent hover:border-${color}-300`
+                      ${
+                        isSelected
+                          ? `text-${color}-600 border-b-2 border-${color}-500 font-semibold`
+                          : `text-gray-500 hover:text-${color}-600 border-b-2 border-transparent hover:border-${color}-300`
                       }
                     `}
                   >
                     <div className="flex items-center justify-center space-x-2">
                       <span className="text-sm font-medium">{tab.label}</span>
-                      <span className={`
+                      <span
+                        className={`
                         inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                         transition-colors duration-200
-                        ${isSelected 
-                          ? `bg-${color}-100 text-${color}-800` 
-                          : `bg-gray-100 text-gray-600 group-hover:bg-${color}-50 group-hover:text-${color}-700`
+                        ${
+                          isSelected
+                            ? `bg-${color}-100 text-${color}-800`
+                            : `bg-gray-100 text-gray-600 group-hover:bg-${color}-50 group-hover:text-${color}-700`
                         }
-                      `}>
+                      `}
+                      >
                         {count}
                       </span>
                     </div>
                     {isSelected && (
-                      <div className={`absolute bottom-0 left-0 w-full h-0.5 bg-${color}-500`} />
+                      <div
+                        className={`absolute bottom-0 left-0 w-full h-0.5 bg-${color}-500`}
+                      />
                     )}
                   </button>
                 );
@@ -224,10 +254,10 @@ export default function ApplicationsPage() {
             onReset={() =>
               setFilters({
                 aiScoreRange: { min: 0, max: 100 },
-                dateRange: { start: '', end: '' },
-                selectedJob: '',
-                skills: '',
-                passportStatus: 'all'
+                dateRange: { start: "", end: "" },
+                selectedJob: "",
+                skills: "",
+                passportStatus: "all",
               })
             }
           />
@@ -242,13 +272,13 @@ export default function ApplicationsPage() {
                 <div
                   key={application.id}
                   className={`shadow rounded-lg p-6 transition-colors duration-200 ${
-                    application.status === 'accepted'
-                      ? 'bg-green-50 border border-green-100'
-                      : application.status === 'rejected'
-                      ? 'bg-gray-50 border border-gray-200'
-                      : application.status === 'reviewed'
-                      ? 'bg-blue-50 border border-blue-100'
-                      : 'bg-yellow-50 border border-yellow-100'
+                    application.status === "accepted"
+                      ? "bg-green-50 border border-green-100"
+                      : application.status === "rejected"
+                      ? "bg-gray-50 border border-gray-200"
+                      : application.status === "reviewed"
+                      ? "bg-blue-50 border border-blue-100"
+                      : "bg-yellow-50 border border-yellow-100"
                   }`}
                 >
                   <div className="flex justify-between items-start">
@@ -256,24 +286,50 @@ export default function ApplicationsPage() {
                       <h3 className="text-lg font-medium text-gray-900">
                         {application.applicant_name}
                       </h3>
-                      <p className="text-sm text-gray-500">{application.email}</p>
+                      <p className="text-sm text-gray-500">
+                        {application.email}
+                      </p>
                       <div className="mt-2 flex items-center space-x-4">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          <svg
+                            className="w-3 h-3 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
                           </svg>
                           AI Score: {application.ai_score?.toFixed(0)}%
                         </span>
                         <span className="text-sm text-gray-500">
-                          Applied {new Date(application.applied_date).toLocaleDateString()}
+                          Applied{" "}
+                          {new Date(
+                            application.applied_date
+                          ).toLocaleDateString()}
                         </span>
                       </div>
                       <div className="mt-2">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                          <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          <svg
+                            className="w-3 h-3 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                            />
                           </svg>
-                          {jobs.find(job => job.id === application.job_id)?.title || 'Job not found'}
+                          {jobs.find((job) => job.id === application.job_id)
+                            ?.title || "Job not found"}
                         </span>
                       </div>
                     </div>
@@ -282,17 +338,22 @@ export default function ApplicationsPage() {
                         <select
                           className={`input-field w-40 ${
                             updatingApplications.has(application.id)
-                              ? 'opacity-50 cursor-not-allowed'
-                              : application.status === 'accepted'
-                              ? 'bg-white border-green-200'
-                              : application.status === 'rejected'
-                              ? 'bg-white border-gray-200'
-                              : application.status === 'reviewed'
-                              ? 'bg-white border-blue-200'
-                              : 'bg-white border-yellow-200'
+                              ? "opacity-50 cursor-not-allowed"
+                              : application.status === "accepted"
+                              ? "bg-white border-green-200"
+                              : application.status === "rejected"
+                              ? "bg-white border-gray-200"
+                              : application.status === "reviewed"
+                              ? "bg-white border-blue-200"
+                              : "bg-white border-yellow-200"
                           }`}
                           value={application.status}
-                          onChange={(e) => handleApplicationStatusChange(application.id, e.target.value as ApplicationStatus)}
+                          onChange={(e) =>
+                            handleApplicationStatusChange(
+                              application.id,
+                              e.target.value as ApplicationStatus
+                            )
+                          }
                           disabled={updatingApplications.has(application.id)}
                         >
                           <option value="pending">Pending</option>
@@ -329,21 +390,31 @@ export default function ApplicationsPage() {
       <Modal
         isOpen={!!selectedApplication}
         onClose={() => setSelectedApplication(null)}
-        title={selectedApplication ? `${selectedApplication.applicant_name}'s Application` : ''}
+        title={
+          selectedApplication
+            ? `${selectedApplication.applicant_name}'s Application`
+            : ""
+        }
       >
         {selectedApplication && (
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <h4 className="text-sm font-medium text-gray-900">Contact Information</h4>
+                <h4 className="text-sm font-medium text-gray-900">
+                  Contact Information
+                </h4>
                 <dl className="mt-2 space-y-1">
                   <div>
                     <dt className="text-sm text-gray-500">Phone</dt>
-                    <dd className="text-sm text-gray-900">{selectedApplication.phone}</dd>
+                    <dd className="text-sm text-gray-900">
+                      {selectedApplication.phone}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-sm text-gray-500">Email</dt>
-                    <dd className="text-sm text-gray-900">{selectedApplication.email}</dd>
+                    <dd className="text-sm text-gray-900">
+                      {selectedApplication.email}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-sm text-gray-500">Passport Number</dt>
@@ -376,17 +447,22 @@ export default function ApplicationsPage() {
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-medium text-gray-900">Cover Letter</h4>
-              <p className="mt-2 text-sm text-gray-600 whitespace-pre-wrap">{selectedApplication.cover_letter}</p>
+              <h4 className="text-sm font-medium text-gray-900">
+                Cover Letter
+              </h4>
+              <p className="mt-2 text-sm text-gray-600 whitespace-pre-wrap">
+                {selectedApplication.cover_letter}
+              </p>
             </div>
             <div>
               <h4 className="text-sm font-medium text-gray-900">
                 Documents ({selectedApplication.documents?.length || 0})
               </h4>
-              {selectedApplication.documents && selectedApplication.documents.length > 0 ? (
+              {selectedApplication.documents &&
+              selectedApplication.documents.length > 0 ? (
                 <div className="mt-2 space-y-2">
                   {selectedApplication.documents.map((document) => (
-                    <div 
+                    <div
                       key={document.id}
                       className="flex items-center justify-between p-3 border border-gray-200 rounded-md bg-gray-50"
                     >
@@ -410,7 +486,11 @@ export default function ApplicationsPage() {
                             {document.document_name}
                           </div>
                           <div className="text-xs text-gray-500">
-                            {getDocumentTypeLabel(document.document_type)} • Uploaded {new Date(document.uploaded_at).toLocaleDateString()}
+                            {getDocumentTypeLabel(document.document_type)} •
+                            Uploaded{" "}
+                            {new Date(
+                              document.uploaded_at
+                            ).toLocaleDateString()}
                           </div>
                         </div>
                       </div>
@@ -440,7 +520,9 @@ export default function ApplicationsPage() {
                   ))}
                 </div>
               ) : (
-                <p className="mt-2 text-sm text-gray-500">No documents uploaded</p>
+                <p className="mt-2 text-sm text-gray-500">
+                  No documents uploaded
+                </p>
               )}
             </div>
           </div>
@@ -448,4 +530,4 @@ export default function ApplicationsPage() {
       </Modal>
     </div>
   );
-} 
+}

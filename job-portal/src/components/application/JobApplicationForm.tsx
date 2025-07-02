@@ -456,7 +456,7 @@ export default function JobApplicationForm({
             type="button"
             onClick={addOptionalDocument}
             disabled={
-              documents.filter((doc) => !doc.isRequired).length >= 
+              documents.filter((doc) => !doc.isRequired).length >=
               availableDocTypes.length - requiredDocuments.length
             }
             className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"

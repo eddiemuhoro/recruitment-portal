@@ -13,22 +13,23 @@ export default function ApplicationList({
   onStatusChange,
 }: ApplicationListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [previewDocument, setPreviewDocument] = useState<ApplicationDocument | null>(null);
+  const [previewDocument, setPreviewDocument] =
+    useState<ApplicationDocument | null>(null);
 
   const getDocumentTypeLabel = (docType: string): string => {
     const labels: Record<string, string> = {
-      cv: 'CV/Resume',
-      passport: 'Passport',
-      birth_certificate: 'Birth Certificate',
-      kcse_certificate: 'KCSE Certificate',
-      kcpe_certificate: 'KCPE Certificate',
-      certificate_of_good_conduct: 'Certificate of Good Conduct',
-      academic_transcripts: 'Academic Transcripts',
-      professional_certificate: 'Professional Certificate',
-      work_permit: 'Work Permit',
-      police_clearance: 'Police Clearance',
-      medical_certificate: 'Medical Certificate',
-      other: 'Other Documents'
+      cv: "CV/Resume",
+      passport: "Passport",
+      birth_certificate: "Birth Certificate",
+      kcse_certificate: "KCSE Certificate",
+      kcpe_certificate: "KCPE Certificate",
+      certificate_of_good_conduct: "Certificate of Good Conduct",
+      academic_transcripts: "Academic Transcripts",
+      professional_certificate: "Professional Certificate",
+      work_permit: "Work Permit",
+      police_clearance: "Police Clearance",
+      medical_certificate: "Medical Certificate",
+      other: "Other Documents",
     };
     return labels[docType] || docType;
   };
@@ -160,7 +161,7 @@ export default function ApplicationList({
                 {application.documents && application.documents.length > 0 ? (
                   <div className="mt-2 space-y-2">
                     {application.documents.map((document) => (
-                      <div 
+                      <div
                         key={document.id}
                         className="flex items-center justify-between p-2 border border-gray-200 rounded-md bg-gray-50"
                       >
@@ -184,7 +185,11 @@ export default function ApplicationList({
                               {document.document_name}
                             </div>
                             <div className="text-xs text-gray-500">
-                              {getDocumentTypeLabel(document.document_type)} • Uploaded {new Date(document.uploaded_at).toLocaleDateString()}
+                              {getDocumentTypeLabel(document.document_type)} •
+                              Uploaded{" "}
+                              {new Date(
+                                document.uploaded_at
+                              ).toLocaleDateString()}
                             </div>
                           </div>
                         </div>
@@ -242,14 +247,16 @@ export default function ApplicationList({
                     ))}
                   </div>
                 ) : (
-                  <p className="mt-2 text-sm text-gray-500">No documents uploaded</p>
+                  <p className="mt-2 text-sm text-gray-500">
+                    No documents uploaded
+                  </p>
                 )}
               </div>
             </div>
           )}
         </div>
       ))}
-      
+
       {previewDocument && (
         <DocumentPreview
           document={previewDocument}
