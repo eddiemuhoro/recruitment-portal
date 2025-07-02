@@ -173,9 +173,13 @@ Always be professional, clear, and concise in your responses. If you're unsure a
         {children}
       </blockquote>
     ),
-    code: ({ node, inline, className, children, ...props }: CodeProps) => {
+    code: ({
+      className,
+      children,
+      ...props
+    }: React.HTMLAttributes<HTMLElement>) => {
       const match = /language-(\w+)/.exec(className || "");
-      return !inline && match ? (
+      return match ? (
         <SyntaxHighlighter
           style={vscDarkPlus}
           language={match[1]}
