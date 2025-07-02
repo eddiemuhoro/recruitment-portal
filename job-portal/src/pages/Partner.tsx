@@ -217,7 +217,7 @@ const Partner: React.FC = () => {
       <section className="relative h-[50vh] min-h-[600px]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3"
+            src="images/partners/partner.jpeg"
             alt="Global workforce"
             className="w-full h-full object-cover"
           />
