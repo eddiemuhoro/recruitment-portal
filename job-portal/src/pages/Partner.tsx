@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaCheckCircle,
   FaUserTie,
@@ -17,6 +17,13 @@ import {
 import { MdSecurity, MdCleaningServices, MdVerified } from "react-icons/md";
 import { motion } from "framer-motion";
 import { submitEmployerInquiry } from "../api/employerInquiries";
+
+const timeZones = [
+  { city: "Nairobi (EAT)", zone: "Africa/Nairobi" },
+  { city: "Dubai (GST)", zone: "Asia/Dubai" },
+  // { city: "Riyadh (AST)", zone: "Asia/Riyadh" },
+  { city: "Doha (AST)", zone: "Asia/Qatar" },
+];
 
 const Partner: React.FC = () => {
   const industries = [
@@ -60,6 +67,8 @@ const Partner: React.FC = () => {
   const processSteps = [
     "Employer submits request",
     "Pre-screening of candidates",
+    "Internal Arrangement with the employer",
+    "Contract signing and Offer letter",
     "Medical + security clearance",
     "Visa processing",
     "Travel arrangements & deployment",
@@ -77,12 +86,125 @@ const Partner: React.FC = () => {
   const statistics = [
     {
       icon: <FaUsers size={40} />,
-      number: "100,000+",
-      label: "Workers Placed",
+      number: "20+",
+      label: "Partners",
     },
     { icon: <FaGlobe size={40} />, number: "4+", label: "Gulf Countries" },
-    { icon: <FaAward size={40} />, number: "15+", label: "Years Experience" },
+    { icon: <FaAward size={40} />, number: "10+", label: "Years Experience" },
     { icon: <MdVerified size={40} />, number: "98%", label: "Success Rate" },
+  ];
+
+  const gulfCountries = [
+    {
+      name: "Saudi Arabia",
+      code: "SA",
+      flag: (
+        <svg
+          width="36"
+          height="24"
+          viewBox="0 0 36 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="36" height="24" rx="3" fill="#1A9F29" />
+          <rect x="6" y="6" width="24" height="12" fill="none" />
+          {/* This is a simple green rectangle for Saudi Arabia. For production, use a proper SVG flag. */}
+        </svg>
+      ),
+    },
+    {
+      name: "United Arab Emirates",
+      code: "AE",
+      flag: (
+        <svg
+          width="36"
+          height="24"
+          viewBox="0 0 36 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="36" height="24" rx="3" fill="#fff" />
+          <rect width="12" height="24" fill="#E94B35" />
+          <rect x="12" width="24" height="8" fill="#009739" />
+          <rect x="12" y="16" width="24" height="8" fill="#262626" />
+        </svg>
+      ),
+    },
+    {
+      name: "Qatar",
+      code: "QA",
+      flag: (
+        <svg
+          width="36"
+          height="24"
+          viewBox="0 0 36 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="36" height="24" rx="3" fill="#fff" />
+          <rect x="12" width="24" height="24" fill="#8A1538" />
+          <polygon
+            points="12,0 14,2 12,4 14,6 12,8 14,10 12,12 14,14 12,16 14,18 12,20 14,22 12,24"
+            fill="#fff"
+          />
+        </svg>
+      ),
+    },
+    {
+      name: "Oman",
+      code: "OM",
+      flag: (
+        <svg
+          width="36"
+          height="24"
+          viewBox="0 0 36 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="36" height="24" rx="3" fill="#fff" />
+          <rect width="8" height="24" fill="#D32030" />
+          <rect x="8" width="28" height="8" fill="#D32030" />
+          <rect x="8" y="16" width="28" height="8" fill="#009739" />
+        </svg>
+      ),
+    },
+    {
+      name: "Bahrain",
+      code: "BH",
+      flag: (
+        <svg
+          width="36"
+          height="24"
+          viewBox="0 0 36 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="36" height="24" rx="3" fill="#fff" />
+          <polygon
+            points="0,0 12,0 12,24 0,24 3,20 0,16 3,12 0,8 3,4 0,0"
+            fill="#D32030"
+          />
+        </svg>
+      ),
+    },
+    {
+      name: "Kuwait",
+      code: "KW",
+      flag: (
+        <svg
+          width="36"
+          height="24"
+          viewBox="0 0 36 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="36" height="24" rx="3" fill="#fff" />
+          <rect y="0" width="36" height="8" fill="#009739" />
+          <rect y="16" width="36" height="8" fill="#D32030" />
+          <polygon points="0,0 8,6 8,18 0,24" fill="#262626" />
+        </svg>
+      ),
+    },
   ];
 
   const testimonials = [
@@ -168,6 +290,27 @@ const Partner: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  const [cityTimes, setCityTimes] = useState<{ [city: string]: string }>({});
+
+  useEffect(() => {
+    const updateTimes = () => {
+      const now = new Date();
+      const newTimes: { [city: string]: string } = {};
+      timeZones.forEach(({ city, zone }) => {
+        newTimes[city] = now.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+          timeZone: zone,
+        });
+      });
+      setCityTimes(newTimes);
+    };
+    updateTimes();
+    const interval = setInterval(updateTimes, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -231,10 +374,11 @@ const Partner: React.FC = () => {
             className="max-w-3xl text-white"
           >
             <h1 className="text-5xl font-bold mb-6">
-              Partner with Us — For Gulf Employers
+              Partner with Us — For International Employers
             </h1>
             <p className="text-xl mb-8">
-              Licensed by Kenya NEA — Your trusted recruitment partner
+              Licensed by Kenya National Employement Authority - A Kenyan
+              Licencing Board
             </p>
             <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
               <p className="text-lg">
@@ -265,6 +409,84 @@ const Partner: React.FC = () => {
                 <div className="text-4xl font-bold mb-2">{stat.number}</div>
                 <div className="text-blue-200">{stat.label}</div>
               </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Countries We Serve Section */}
+      <section className="relative py-16 bg-gradient-to-br from-blue-50 via-white to-blue-100 overflow-hidden">
+        {/* Decorative Globe Icon */}
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none select-none z-0">
+          <svg
+            width="200"
+            height="200"
+            viewBox="0 0 200 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="100"
+              cy="100"
+              r="90"
+              stroke="#2563eb"
+              strokeWidth="8"
+              fill="#e0e7ff"
+            />
+            <ellipse
+              cx="100"
+              cy="100"
+              rx="80"
+              ry="30"
+              fill="#93c5fd"
+              fillOpacity="0.2"
+            />
+            <ellipse
+              cx="100"
+              cy="100"
+              rx="60"
+              ry="80"
+              fill="#2563eb"
+              fillOpacity="0.07"
+            />
+          </svg>
+        </div>
+        <div className="container mx-auto px-6 relative z-10">
+          <h2 className="text-2xl font-bold mb-2 text-center text-blue-900 flex flex-col items-center">
+            <span className="inline-flex items-center justify-center mb-2">
+              <svg
+                className="w-8 h-8 text-blue-600 mr-2"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10C22 6.477 17.523 2 12 2zm0 2c1.657 0 3 4.03 3 8s-1.343 8-3 8-3-4.03-3-8 1.343-8 3-8zm-7.938 7C4.486 6.392 7.92 4 12 4c4.08 0 7.514 2.392 7.938 7H4.062zM4.062 13h15.876c-.424 4.608-3.858 7-7.938 7-4.08 0-7.514-2.392-7.938-7z" />
+              </svg>
+              Countries We Serve
+            </span>
+          </h2>
+          <p className="text-center text-blue-700 mb-10 max-w-2xl mx-auto text-lg">
+            We proudly partner with employers across the Gulf region, providing
+            top Kenyan talent to these countries:
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 justify-items-center">
+            {gulfCountries.map((country, idx) => (
+              <div
+                key={country.code}
+                className="flex flex-col items-center justify-center group transform transition duration-300 hover:scale-110 hover:shadow-2xl hover:bg-blue-50 rounded-xl border border-blue-100 bg-white/80 shadow-md w-32 h-40 sm:w-32 sm:h-40 md:w-36 md:h-44 p-4"
+                style={{ boxShadow: "0 2px 8px 0 rgba(37,99,235,0.07)" }}
+              >
+                <motion.div
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.15, rotate: [0, 5, -5, 0] }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  className="mb-2 drop-shadow-md flex items-center justify-center h-16"
+                >
+                  {country.flag}
+                </motion.div>
+                <span className="text-sm font-semibold text-blue-900 text-center mt-1 group-hover:text-blue-700 transition-colors">
+                  {country.name}
+                </span>
+              </div>
             ))}
           </div>
         </div>
@@ -436,7 +658,7 @@ const Partner: React.FC = () => {
                     href="tel:+254700000000"
                     className="text-blue-600 hover:text-blue-800"
                   >
-                    +254 700 000 000
+                    +254 723 464 058
                   </a>
                 </p>
                 <p className="flex items-center">
@@ -445,7 +667,7 @@ const Partner: React.FC = () => {
                     href="mailto:employers@kenyanagency.com"
                     className="text-blue-600 hover:text-blue-800"
                   >
-                    employers@kenyanagency.com
+                    skywaysglobalhr@gmail.com
                   </a>
                 </p>
                 <p className="text-sm text-gray-500">
@@ -476,7 +698,7 @@ const Partner: React.FC = () => {
                 Business account.
               </p>
               <a
-                href="https://wa.me/254700000000"
+                href="https://wa.me/254723464058"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
@@ -500,7 +722,7 @@ const Partner: React.FC = () => {
                 <div>
                   <h4 className="font-medium">Nairobi Head Office</h4>
                   <p className="text-gray-600">
-                    123 Business Park, Westlands
+                    Ruprani Building, 2nd Floor
                     <br />
                     Nairobi, Kenya
                   </p>
@@ -523,7 +745,7 @@ const Partner: React.FC = () => {
               </h3>
               <div className="space-y-3">
                 <a
-                  href="https://linkedin.com/company/kenyanagency"
+                  href="https://www.linkedin.com/in/skyways-global-service-limited-34a235199"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center text-gray-600 hover:text-blue-600"
@@ -537,23 +759,9 @@ const Partner: React.FC = () => {
                   </svg>
                   LinkedIn
                 </a>
+
                 <a
-                  href="https://twitter.com/kenyanagency"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center text-gray-600 hover:text-blue-400"
-                >
-                  <svg
-                    className="w-6 h-6 mr-2"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                  </svg>
-                  Twitter
-                </a>
-                <a
-                  href="https://facebook.com/kenyanagency"
+                  href="https://www.facebook.com/people/Skyways-Global-Services-Ltd/100064217914039/?ref=embed_page#"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center text-gray-600 hover:text-blue-600"
@@ -631,22 +839,14 @@ const Partner: React.FC = () => {
               </div>
               <h3 className="text-xl font-semibold mb-4">Global Time Zones</h3>
               <div className="space-y-2">
-                <p className="flex justify-between">
-                  <span>Nairobi (EAT):</span>
-                  <span className="font-medium">UTC+3</span>
-                </p>
-                <p className="flex justify-between">
-                  <span>Dubai (GST):</span>
-                  <span className="font-medium">UTC+4</span>
-                </p>
-                <p className="flex justify-between">
-                  <span>Riyadh (AST):</span>
-                  <span className="font-medium">UTC+3</span>
-                </p>
-                <p className="flex justify-between">
-                  <span>Doha (AST):</span>
-                  <span className="font-medium">UTC+3</span>
-                </p>
+                {timeZones.map(({ city }) => (
+                  <p className="flex justify-between items-center" key={city}>
+                    <span>{city}:</span>
+                    <span className="font-mono font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-lg shadow-sm border border-blue-100">
+                      {cityTimes[city] || "--:--:-- --"}
+                    </span>
+                  </p>
+                ))}
               </div>
             </motion.div>
           </div>
