@@ -39,14 +39,6 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/about"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
                   to="/jobs"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
@@ -61,14 +53,7 @@ export default function Footer() {
                   Services
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/case-studies"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Case Studies
-                </Link>
-              </li>
+
               <li>
                 <Link
                   to="/contact"
