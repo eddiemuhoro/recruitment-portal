@@ -15,6 +15,49 @@ import {
   MdOutlinePayments,
 } from "react-icons/md";
 
+const partners = [
+  {
+    logo: "/images/companies/smasco.jpg",
+    name: "Smasco",
+    location: "Riyadh, KSA",
+  },
+  {
+    logo: "/images/companies/rayint.png",
+    name: "Ray Int",
+    location: "Muscat, Oman",
+  },
+  {
+    logo: "/images/companies/op.png",
+    name: "Optimize Security",
+    location: "Doha, Qatar",
+  },
+  {
+    logo: "/images/companies/gastro.png",
+    name: "Gastronomica Hotels",
+    location: "Kuwait City, Kuwait",
+  },
+  {
+    logo: "/images/companies/g4s.png",
+    name: "G4S Security",
+    location: "Doha, Qatar",
+  },
+  {
+    logo: "/images/companies/dubaimetro.png",
+    name: "Dubai Metro",
+    location: "Dubai, UAE",
+  },
+  {
+    logo: "/images/companies/amp.png",
+    name: "Arabian MEP",
+    location: "Doha, Qatar",
+  },
+  {
+    logo: "/images/companies/adeed.png",
+    name: "Adeed",
+    location: "Riyadh, Saudi Arabia",
+  },
+];
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
@@ -358,94 +401,26 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Latest Updates Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
-            Latest Updates
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-sm">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <FaGlobe className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold">New Office Opening</h3>
-                  <p className="text-gray-500">March 15, 2024</p>
-                </div>
-              </div>
-              <p className="text-gray-600">
-                Expanding our presence in Southeast Asia with a new office in
-                Singapore.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-sm">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <FaUsers className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold">
-                    Industry Partnership
-                  </h3>
-                  <p className="text-gray-500">March 10, 2024</p>
-                </div>
-              </div>
-              <p className="text-gray-600">
-                Strategic partnership with leading tech companies for
-                specialized recruitment.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Partners Section */}
       <div className="bg-gray-50 py-16">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">Our Partners</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
-            <img
-              src="https://img.freepik.com/free-vector/bicycle-shop-logo-design-vector_53876-40626.jpg?semt=ais_hybrid&w=740"
-              alt="Partner 1"
-              className="h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="https://img.freepik.com/free-vector/indonesian-halal-logo-new-branding-2022_17005-1495.jpg?semt=ais_hybrid&w=740"
-              alt="Partner 2"
-              className="h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="https://img.freepik.com/free-vector/bicycle-shop-logo-design-vector_53876-40626.jpg?semt=ais_hybrid&w=740"
-              alt="Partner 3"
-              className="h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?semt=ais_hybrid&w=740"
-              alt="Partner 4"
-              className="h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="https://img.freepik.com/premium-vector/maika-modern-ai-powered-customer-service-digital-marketing-solution_944011-4723.jpg?semt=ais_hybrid&w=740"
-              alt="Partner 5"
-              className="h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="https://img.freepik.com/free-vector/creative-barbecue-logo-template_23-2149017951.jpg?semt=ais_hybrid&w=740"
-              alt="Partner 6"
-              className="h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="https://img.freepik.com/free-vector/gradient-quill-pen-design-template_23-2149837194.jpg?semt=ais_hybrid&w=740"
-              alt="Partner 7"
-              className="h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="https://img.freepik.com/premium-photo/logo-design-tshirt_834604-2901.jpg?semt=ais_hybrid&w=740"
-              alt="Partner 8"
-              className="h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
+            {partners.map((partner) => (
+              <div key={partner.name} className="flex flex-col items-center">
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="h-32 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                />
+                <span className="mt-3 text-base font-semibold text-blue-900">
+                  {partner.name}
+                </span>
+                <span className="text-sm text-gray-500">
+                  {partner.location}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -510,7 +485,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      {/* <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
             Client Testimonials
@@ -537,7 +512,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
