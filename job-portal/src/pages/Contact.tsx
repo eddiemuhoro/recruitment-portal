@@ -42,9 +42,10 @@ export default function Contact() {
   }>({ type: null, message: "" });
 
   // Nairobi office location coordinates
+  // 1.282106,36.8196406,165m
   const officeLocation = {
-    lat: -1.28212, // Latitude for Westlands, Nairobi
-    lng: 36.8193315, // Longitude for Westlands, Nairobi
+    lat: -1.282106, // Latitude for Westlands, Nairobi
+    lng: 36.8196409, // Longitude for Westlands, Nairobi
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -410,26 +411,21 @@ export default function Contact() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
               Our Location
             </h2>
-            <div className="rounded-xl overflow-hidden shadow-lg h-[500px] w-full">
-              <MapContainer
-                center={[officeLocation.lat, officeLocation.lng]}
-                zoom={20}
-                style={{ height: "100%", width: "100%" }}
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.mapbox.com/">Mapbox</a> contributors'
-                  url={`https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=${
-                    import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
-                  }`}
-                />
-                <Marker position={[officeLocation.lat, officeLocation.lng]}>
-                  <Popup>
-                    Our Office Location
-                    <br />
-                    Ruprani House, Nairobi
-                  </Popup>
-                </Marker>
-              </MapContainer>
+            <div style={{ height: "100%", width: "100%" }}>
+              <iframe
+                width="100%"
+                height="100%"
+                style={{
+                  border: 0,
+                  minHeight: "300px",
+                  borderRadius: "0.5rem",
+                }}
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                src={`https://www.google.com/maps?q=${officeLocation.lat},${officeLocation.lng}&hl=es;z=20&output=embed`}
+                title="Our Office Location"
+              />
             </div>
             <p className="mt-4 text-gray-600 text-center">
               Ruprani House, Nairobi, Kenya
