@@ -32,6 +32,7 @@ export type ApplicationDocument = {
 export type Job = {
   id: string;
   title: string;
+  createdAt: string;
   company: string;
   location: string;
   type: "Full-time" | "Part-time" | "Contract" | "Remote";
@@ -68,7 +69,7 @@ export type JobApplicationCreate = {
   documents: Omit<ApplicationDocument, "id" | "uploaded_at">[];
 };
 
-export interface EmployerInquiry {
+export type EmployerInquiry = {
   id: number;
   agency_id: number;
   employer_name: string;
@@ -77,4 +78,4 @@ export interface EmployerInquiry {
   phone_number?: string;
   is_urgent: boolean;
   created_at: string;
-}
+};
