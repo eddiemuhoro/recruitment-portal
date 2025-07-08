@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Footer from "./Footer";
 import { useState } from "react";
 import AIChatWidget from "../AIChatWidget";
+import { useLocation } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,6 +11,16 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const location = useLocation();
+  const navLinks = [
+    { to: "/services", label: "Services" },
+    { to: "/jobs", label: "Jobs" },
+    { to: "/partner", label: "Employers" },
+    { to: "/candidates", label: "Candidates" },
+    { to: "/ai-features", label: "AI Assistant" },
+    { to: "/contact", label: "Contact Us" },
+  ];
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -25,46 +36,26 @@ export default function Layout({ children }: LayoutProps) {
                 <img
                   src="/images/logos/skyways-logo.png"
                   alt="Logo"
-                  className="h-20 w-auto"
+                  className="h-16 w-auto"
                 />
+                <span className="ml-3 text-2xl font-bold text-blue-800">
+                  Skyways Global
+                </span>
               </Link>
               <div className="hidden md:flex items-center space-x-6">
-                <Link
-                  to="/services"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Services
-                </Link>
-                <Link
-                  to="/jobs"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Jobs
-                </Link>
-                <Link
-                  to="/partner"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Employers
-                </Link>
-                <Link
-                  to="/candidates"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Candidates
-                </Link>
-                <Link
-                  to="/ai-features"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  AI Assistant
-                </Link>
-                <Link
-                  to="/contact"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Contact Us
-                </Link>
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                      location.pathname === link.to
+                        ? "text-blue-800 font-bold border-b-2 border-blue-600"
+                        : "text-gray-700 hover:text-blue-600"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -115,62 +106,20 @@ export default function Layout({ children }: LayoutProps) {
           id="mobile-menu"
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              to="/jobs"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Jobs
-            </Link>
-            <Link
-              to="/services"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Services
-            </Link>
-            <Link
-              to="/partner"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Employers
-            </Link>
-            <Link
-              to="/candidates"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Candidates
-            </Link>
-            <Link
-              to="/ai-features"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              AI Assistant
-            </Link>
-            <Link
-              to="/contact"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Contact Us
-            </Link>
-            {/* <Link
-              to="/login"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Register
-            </Link> */}
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+                  location.pathname === link.to
+                    ? "text-blue-800 font-bold bg-blue-100"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </nav>
