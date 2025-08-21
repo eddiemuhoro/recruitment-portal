@@ -367,8 +367,27 @@ export default function Contact() {
 
       setSubmitStatus({
         type: "success",
-        message: "Thank you for your message! We'll get back to you soon.",
+        message:
+          "Thank you for your message! We'll get back to you soon. Redirecting to WhatsApp...",
       });
+
+      // Create WhatsApp message for contact inquiry
+      const whatsappMessage = `Hello! I have submitted a contact inquiry through your website.
+
+*Contact Details:*
+• Name: ${formData.name}
+• Email: ${formData.email}
+• Phone: ${normalizedPhone || "Not provided"}
+• Subject: ${formData.subject}
+
+*Message:*
+${formData.message}
+
+Please respond when convenient. Thank you!`;
+
+      const whatsappNumber = "254723464058"; // Your WhatsApp number
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
       // Reset form
       setFormData({
@@ -379,6 +398,11 @@ export default function Contact() {
         message: "",
       });
       setPhoneValidation({ isValid: true });
+
+      // Redirect to WhatsApp after a short delay to show success message
+      setTimeout(() => {
+        window.open(whatsappUrl, "_blank");
+      }, 2000);
     } catch (error) {
       console.error("Error submitting contact form:", error);
       setSubmitStatus({
