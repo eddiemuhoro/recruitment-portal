@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Footer from "./Footer";
 import { useState } from "react";
 import AIChatWidget from "../AIChatWidget";
@@ -11,6 +11,11 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // const searchParams = useSearchParams()
+  // const params = new URLSearchParams(searchParams.toString())
+  // const router = useRouter() //get current url
+  // params.set('key', value)
+  // router.push(`&params.tosting`) // append queries to url
 
   const location = useLocation();
   const navLinks = [
