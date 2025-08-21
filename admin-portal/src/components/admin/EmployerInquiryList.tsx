@@ -1,5 +1,10 @@
 import { useState } from "react";
-import type { EmployerInquiry, EmployerInquiryUpdate, InquiryStatus, Priority } from "../../types";
+import type {
+  EmployerInquiry,
+  EmployerInquiryUpdate,
+  InquiryStatus,
+  Priority,
+} from "../../types";
 
 interface EmployerInquiryListProps {
   inquiries: EmployerInquiry[];
@@ -23,21 +28,31 @@ export default function EmployerInquiryList({
 
   const getStatusColor = (status: InquiryStatus) => {
     switch (status) {
-      case "new": return "bg-blue-100 text-blue-800";
-      case "in_progress": return "bg-yellow-100 text-yellow-800";
-      case "resolved": return "bg-green-100 text-green-800";
-      case "closed": return "bg-gray-100 text-gray-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "new":
+        return "bg-blue-100 text-blue-800";
+      case "in_progress":
+        return "bg-yellow-100 text-yellow-800";
+      case "resolved":
+        return "bg-green-100 text-green-800";
+      case "closed":
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getPriorityColor = (priority: Priority) => {
     switch (priority) {
-      case "urgent": return "bg-red-100 text-red-800";
-      case "high": return "bg-orange-100 text-orange-800";
-      case "medium": return "bg-yellow-100 text-yellow-800";
-      case "low": return "bg-gray-100 text-gray-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "urgent":
+        return "bg-red-100 text-red-800";
+      case "high":
+        return "bg-orange-100 text-orange-800";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800";
+      case "low":
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -50,9 +65,9 @@ export default function EmployerInquiryList({
   };
 
   const handleSaveNotes = (inquiryId: string) => {
-    onUpdate(inquiryId, { 
+    onUpdate(inquiryId, {
       admin_notes: adminNotes,
-      admin_response: adminResponse 
+      admin_response: adminResponse,
     });
     setEditingInquiry(null);
     setAdminNotes("");
@@ -102,7 +117,7 @@ export default function EmployerInquiryList({
                         inquiry.status
                       )}`}
                     >
-                      {inquiry.status.replace('_', ' ').toUpperCase()}
+                      {inquiry.status.replace("_", " ").toUpperCase()}
                     </span>
                     <span
                       className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(
@@ -117,9 +132,14 @@ export default function EmployerInquiryList({
                     {inquiry.phone_number && ` • ${inquiry.phone_number}`}
                   </p>
                   <p className="text-sm text-gray-500">
-                    Received: {new Date(inquiry.created_at).toLocaleDateString()} 
+                    Received:{" "}
+                    {new Date(inquiry.created_at).toLocaleDateString()}
                     {inquiry.updated_at !== inquiry.created_at && (
-                      <span> • Updated: {new Date(inquiry.updated_at).toLocaleDateString()}</span>
+                      <span>
+                        {" "}
+                        • Updated:{" "}
+                        {new Date(inquiry.updated_at).toLocaleDateString()}
+                      </span>
                     )}
                   </p>
                 </div>
@@ -129,43 +149,57 @@ export default function EmployerInquiryList({
                 {/* Quick Action Buttons */}
                 <div className="flex items-center gap-1">
                   <button
-                    onClick={() => handleStatusChange(inquiry.id, 'in_progress')}
+                    onClick={() =>
+                      handleStatusChange(inquiry.id, "in_progress")
+                    }
                     className={`px-2 py-1 text-xs font-medium rounded ${
-                      inquiry.status === 'in_progress' 
-                        ? 'bg-purple-100 text-purple-800' 
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      inquiry.status === "in_progress"
+                        ? "bg-purple-100 text-purple-800"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
-                    disabled={inquiry.status === 'in_progress'}
+                    disabled={inquiry.status === "in_progress"}
                   >
                     In Progress
                   </button>
                   <button
-                    onClick={() => handleStatusChange(inquiry.id, 'resolved')}
+                    onClick={() => handleStatusChange(inquiry.id, "resolved")}
                     className={`px-2 py-1 text-xs font-medium rounded ${
-                      inquiry.status === 'resolved' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      inquiry.status === "resolved"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
-                    disabled={inquiry.status === 'resolved'}
+                    disabled={inquiry.status === "resolved"}
                   >
                     Resolve
                   </button>
                   <button
-                    onClick={() => handlePriorityChange(inquiry.id, inquiry.priority === 'urgent' ? 'medium' : 'urgent')}
+                    onClick={() =>
+                      handlePriorityChange(
+                        inquiry.id,
+                        inquiry.priority === "urgent" ? "medium" : "urgent"
+                      )
+                    }
                     className={`px-2 py-1 text-xs font-medium rounded ${
-                      inquiry.priority === 'urgent' 
-                        ? 'bg-red-100 text-red-800' 
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      inquiry.priority === "urgent"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
                   >
-                    {inquiry.priority === 'urgent' ? 'Remove Urgent' : 'Mark Urgent'}
+                    {inquiry.priority === "urgent"
+                      ? "Remove Urgent"
+                      : "Mark Urgent"}
                   </button>
                 </div>
 
                 <select
                   className="text-sm border border-gray-300 rounded-md px-3 py-1"
                   value={inquiry.status}
-                  onChange={(e) => handleStatusChange(inquiry.id, e.target.value as InquiryStatus)}
+                  onChange={(e) =>
+                    handleStatusChange(
+                      inquiry.id,
+                      e.target.value as InquiryStatus
+                    )
+                  }
                 >
                   <option value="new">New</option>
                   <option value="in_progress">In Progress</option>
@@ -176,7 +210,9 @@ export default function EmployerInquiryList({
                 <select
                   className="text-sm border border-gray-300 rounded-md px-3 py-1"
                   value={inquiry.priority}
-                  onChange={(e) => handlePriorityChange(inquiry.id, e.target.value as Priority)}
+                  onChange={(e) =>
+                    handlePriorityChange(inquiry.id, e.target.value as Priority)
+                  }
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -185,12 +221,14 @@ export default function EmployerInquiryList({
                 </select>
 
                 <button
-                  onClick={() => setExpandedInquiry(
-                    expandedInquiry === inquiry.id ? null : inquiry.id
-                  )}
+                  onClick={() =>
+                    setExpandedInquiry(
+                      expandedInquiry === inquiry.id ? null : inquiry.id
+                    )
+                  }
                   className="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md"
                 >
-                  {expandedInquiry === inquiry.id ? 'Collapse' : 'Expand'}
+                  {expandedInquiry === inquiry.id ? "Collapse" : "Expand"}
                 </button>
 
                 <button
@@ -222,7 +260,7 @@ export default function EmployerInquiryList({
                     <h4 className="text-sm font-medium text-gray-900 mb-2">
                       Admin Management
                     </h4>
-                    
+
                     {editingInquiry === inquiry.id ? (
                       <div className="space-y-3">
                         <div>
@@ -278,7 +316,7 @@ export default function EmployerInquiryList({
                             </div>
                           </div>
                         )}
-                        
+
                         {inquiry.admin_response && (
                           <div>
                             <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -290,18 +328,23 @@ export default function EmployerInquiryList({
                               </p>
                               {inquiry.responded_at && (
                                 <p className="text-xs text-gray-500 mt-2">
-                                  Sent: {new Date(inquiry.responded_at).toLocaleString()}
+                                  Sent:{" "}
+                                  {new Date(
+                                    inquiry.responded_at
+                                  ).toLocaleString()}
                                 </p>
                               )}
                             </div>
                           </div>
                         )}
-                        
+
                         <button
                           onClick={() => startEditing(inquiry)}
                           className="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md"
                         >
-                          {inquiry.admin_notes || inquiry.admin_response ? 'Edit Notes/Response' : 'Add Notes/Response'}
+                          {inquiry.admin_notes || inquiry.admin_response
+                            ? "Edit Notes/Response"
+                            : "Add Notes/Response"}
                         </button>
                       </div>
                     )}
