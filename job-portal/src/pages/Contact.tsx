@@ -457,7 +457,7 @@ Please respond when convenient. Thank you!`;
             {/* Contact Form */}
             <div className="bg-white p-8 rounded-xl shadow-sm">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Send us a Message
+                Send us a Message.
               </h2>
 
               {/* Status Message */}
