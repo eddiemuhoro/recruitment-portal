@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
 from datetime import datetime
-from models import JobType, JobStatus, ApplicationStatus, UserRole, DocumentType
+from models import JobType, JobStatus, ApplicationStatus, UserRole, DocumentType, InquiryStatus, Priority
 
 class UserBase(BaseModel):
     name: str
@@ -101,14 +101,29 @@ class EmployerInquiryBase(BaseModel):
     contact_email: EmailStr
     phone_number: str | None = None
     is_urgent: bool = False
+    status: InquiryStatus = InquiryStatus.NEW
+    priority: Priority = Priority.MEDIUM
     agency_id: int
 
 class EmployerInquiryCreate(EmployerInquiryBase):
     pass
 
+class EmployerInquiryUpdate(BaseModel):
+    status: Optional[InquiryStatus] = None
+    priority: Optional[Priority] = None
+    admin_notes: Optional[str] = None
+    admin_response: Optional[str] = None
+    assigned_to: Optional[str] = None
+
 class EmployerInquiry(EmployerInquiryBase):
     id: int
+    admin_notes: Optional[str] = None
+    admin_response: Optional[str] = None
+    assigned_to: Optional[str] = None
+    responded_at: Optional[datetime] = None
+    resolved_at: Optional[datetime] = None
     created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True

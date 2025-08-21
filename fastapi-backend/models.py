@@ -21,6 +21,18 @@ class ApplicationStatus(str, enum.Enum):
     ACCEPTED = "accepted"
     REJECTED = "rejected"
 
+class InquiryStatus(str, enum.Enum):
+    NEW = "new"
+    IN_PROGRESS = "in_progress"
+    RESOLVED = "resolved"
+    CLOSED = "closed"
+
+class Priority(str, enum.Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    URGENT = "urgent"
+
 class UserRole(str, enum.Enum):
     ADMIN = "admin"
     EMPLOYER = "employer"
@@ -125,7 +137,15 @@ class EmployerInquiry(Base):
     contact_email = Column(String, nullable=False)
     phone_number = Column(String, nullable=True)
     is_urgent = Column(Boolean, default=False)
+    status = Column(Enum(InquiryStatus), default=InquiryStatus.NEW)
+    priority = Column(Enum(Priority), default=Priority.MEDIUM)
+    admin_notes = Column(Text, nullable=True)
+    admin_response = Column(Text, nullable=True)
+    assigned_to = Column(String, nullable=True)  # Admin username/email
+    responded_at = Column(DateTime, nullable=True)
+    resolved_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     agency = relationship("Agency", back_populates="inquiries")
 
