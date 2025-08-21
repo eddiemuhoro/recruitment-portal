@@ -679,7 +679,7 @@ Please respond when convenient. Thank you!`;
                         Address
                       </h3>
                       <p className="text-gray-600">
-                        Moktar Daddah Street
+                        Moktar Daddah Street, Opposite Jevanjee Gardens
                         <br />
                         Ruprani Building, 2nd Floor, Room 207
                         <br />
