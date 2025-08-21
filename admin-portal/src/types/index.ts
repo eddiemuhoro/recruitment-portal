@@ -65,6 +65,9 @@ export type JobApplication = {
   documents: ApplicationDocument[];
 };
 
+export type InquiryStatus = "new" | "in_progress" | "resolved" | "closed";
+export type Priority = "low" | "medium" | "high" | "urgent";
+
 export interface EmployerInquiry {
   id: string;
   agency_id: number;
@@ -73,7 +76,31 @@ export interface EmployerInquiry {
   phone_number: string | null;
   message: string;
   is_urgent: boolean;
+  status: InquiryStatus;
+  priority: Priority;
+  admin_notes?: string;
+  admin_response?: string;
+  assigned_to?: string;
+  responded_at?: string;
+  resolved_at?: string;
   created_at: string;
+  updated_at: string;
+}
+
+export interface EmployerInquiryUpdate {
+  status?: InquiryStatus;
+  priority?: Priority;
+  admin_notes?: string;
+  admin_response?: string;
+  assigned_to?: string;
+}
+
+export interface InquiryStats {
+  total: number;
+  new: number;
+  in_progress: number;
+  resolved: number;
+  urgent: number;
 }
 
 export interface ContactInquiry {

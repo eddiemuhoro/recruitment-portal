@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import type { JobApplication, ApplicationDocument } from "../../types";
-import AIScoreCircle from "./AIScoreCircle";
 import DocumentPreview from "../common/DocumentPreview";
 
 interface ApplicationListProps {
@@ -63,13 +62,6 @@ export default function ApplicationList({
                 </div>
               </div>
               <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-500">AI Score:</span>
-                  <AIScoreCircle
-                    score={application.ai_score || 0}
-                    status={application.status}
-                  />
-                </div>
                 <select
                   value={application.status}
                   onChange={(e) =>

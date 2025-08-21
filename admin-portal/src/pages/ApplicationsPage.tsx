@@ -290,22 +290,6 @@ export default function ApplicationsPage() {
                         {application.email}
                       </p>
                       <div className="mt-2 flex items-center space-x-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          <svg
-                            className="w-3 h-3 mr-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          AI Score: {application.ai_score?.toFixed(0)}%
-                        </span>
                         <span className="text-sm text-gray-500">
                           Applied{" "}
                           {new Date(
